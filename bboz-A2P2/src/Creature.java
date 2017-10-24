@@ -62,6 +62,8 @@ public class Creature {
 	
 	//Represents the area 
 	protected Area boundaryBox;
+	protected Area FOV;
+	
 	//Represents hunger value for the fish
 	protected int hungrySinceFrames = 0;
 	
@@ -92,6 +94,14 @@ public class Creature {
 	protected Arc2D fishUpperTail2;
 	protected Arc2D fishUpperTail3;
 
+	protected Arc2D detectionRadiusCircle;
+	
+	protected int detectionRadius = 550;
+
+	protected boolean isIn = true;
+	
+	public void setIsIn(boolean isIn) {this.isIn = isIn;}
+	public boolean getIsIn() {return isIn;}
 	
 	
 	//Getter functions
@@ -104,11 +114,13 @@ public class Creature {
 	
 	//Default constructor for the default creature type object								[These parameters are very likely to be modified]
 	public Creature() {
+		randomAcceleration = PVector.random2D().normalize();										//Fish are born with a random acceleration vector
 		anchorPoint = new PVector(200, 200);
 		scaleFactor = (int)(Math.random()*10);
 		creatureColor = Color.BLUE;
 		speedVector = new PVector(10,10);
 		acceleration = new PVector(1,1);
+		extraForce = new PVector(1,1);
 	}
 	
 	//Getter functions
@@ -136,6 +148,19 @@ public class Creature {
 	protected float initialScale;
 
 	
+	public void swimToMiddle() {
+		acceleration = PVector.sub(EnviromentPanel.middlePoint(), getPositionVector());
+		acceleration.normalize();
+		acceleration.limit(MAX_ACCELERATION);
+		acceleration.setMag(1f);
+		//acceleration.mult(10);
+		
+		speedVector.add(acceleration);
+		speedVector.limit(maxVelocity);
+		anchorPoint.add(speedVector);
+		
+	}
+	
 	//Return true if both objects collide
 	protected boolean collides(Fish f) {
 		return (this.getBoundary().intersects(f.getBoundary().getBounds2D())&&
@@ -158,6 +183,7 @@ public class Creature {
 		fishUpperTail2 = new Arc2D.Double(0 - fishWidth + 55, 0 - fishHeight+ 5, 60, 60, 225, 90,Arc2D.PIE);
 		fishUpperTail3 = new Arc2D.Double(0 - fishWidth + 55, 0 - fishHeight+ 15, 60, 60, 225, 90,Arc2D.PIE);
 		
+		detectionRadiusCircle = new Arc2D.Double(-detectionRadius/2, -detectionRadius/2, detectionRadius, detectionRadius, 0, 360,Arc2D.PIE);
 		
 		
 		//Added the area of each part
@@ -197,28 +223,54 @@ public class Creature {
 		}
 	}
 	
+	//Gets last acceleration vector and adds in on speed vector
+	public void swimIdle() {
+		randomAcceleration.limit(MAX_ACCELERATION).mult(2);
+		speedVector.add(randomAcceleration);
+		speedVector.limit(maxVelocity);
+		anchorPoint.add(extraForce);
+		anchorPoint.add(speedVector);									//Adds speed vector to position vector
+		extraForce = new PVector(0,0);		
+	}
+	
 	//Checks boundaries for Fish object
 	public static void checkBoundaries(Creature f) {
 		JPanel panelReference = getPanel();
+		/*
 		if(f.anchorPoint.x >= getPanel().getWidth() - f.fishWidth/4) {			//Checks for right side of screen	
-			f.acceleration.x = -1;												//Reverse acceleration
-			f.speedVector.add(f.acceleration);
+			//f.acceleration.x = -1;												//Reverse acceleration
+			//f.speedVector.add(f.acceleration);
+			f.swimToMiddle();
+			f.setIsIn(false);
 		}
 		if(f.anchorPoint.x <= 0 + f.fishWidth) {								//Checks for left side of screen
-			f.acceleration.x = 1;												//Reverse acceleration
-			f.speedVector.add(f.acceleration);
-			
+			//f.acceleration.x = 1;												//Reverse acceleration
+			//f.speedVector.add(f.acceleration);
+			f.swimToMiddle();
+			f.setIsIn(false);
 		}
 			
 		if(f.anchorPoint.y >= getPanel().getHeight() - f.fishHeight/4) {		//Checks for bottom of screen
-			f.acceleration.y = -1;												//Reverse acceleration
-			f.speedVector.add(f.acceleration);
+			//f.acceleration.y = -1;												//Reverse acceleration
+			//f.speedVector.add(f.acceleration);
+			f.swimToMiddle();
+			f.setIsIn(false);
 		}
 		
 		if(f.anchorPoint.y <= 0 + f.fishHeight) {								//Checks for top of the screen
-			f.acceleration.y = 1;												//Reverse acceleration
-			f.speedVector.add(f.acceleration);
+			//f.acceleration.y = 1;												//Reverse acceleration
+			//f.speedVector.add(f.acceleration);
+			f.swimToMiddle();
+			f.setIsIn(false);
 		}
+		*/
+		if((f.anchorPoint.x >= getPanel().getWidth() - f.fishWidth/4)||f.anchorPoint.x <= 0 + f.fishWidth||
+				f.anchorPoint.y >= getPanel().getHeight() - f.fishHeight/4||f.anchorPoint.y <= 0 + f.fishHeight) {
+			f.swimToMiddle();
+			f.setIsIn(false);
+			
+		}
+			
 		
 
 		
@@ -252,13 +304,13 @@ public class Creature {
 		
 		//Used to draw grids
 		
-		/*
-		g2.setColor(Color.BLACK);
-		for(int i = 0; i<1920;i+=10) 
-			g2.drawLine(i, 0, i, 1080);	
-		for(int j = 0;j<1080;j+=10)
-			g2.drawLine(0, j, 1920, j);
-		*/
+		
+		//g2.setColor(Color.BLACK);
+		//for(int i = 0; i<1920;i+=10) 
+		//	g2.drawLine(i, 0, i, 1080);	
+		//for(int j = 0;j<1080;j+=10)
+		//	g2.drawLine(0, j, 1920, j);
+		
 		
 		Color darkOrange = new Color(255, 140, 0);
 		Stroke defaultStroke = g2.getStroke();
@@ -270,6 +322,10 @@ public class Creature {
 		g2.setColor(darkOrange);
 		
 		g2.translate((int)anchorPoint.x, (int)anchorPoint.y);
+		
+		
+		
+		
 		g2.scale(scaleFactor, scaleFactor);
 		
 		float angle = speedVector.heading();									//Point Fish to position vector
@@ -378,7 +434,6 @@ public class Creature {
 		
 		//g2.draw(getBoundary().getBounds2D());
 		
-		//g2.setColor(Color.MAGENTA);
 		//g2.drawLine((int)anchorPoint.x, (int)anchorPoint.y,
 		//		(int)anchorPoint.x+ (int)(speedVector.x*100), (int)anchorPoint.y + (int)(speedVector.y*100));
 		

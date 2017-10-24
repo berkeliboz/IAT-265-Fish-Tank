@@ -91,10 +91,10 @@ import processing.core.PVector;
 //This class implements main panel for the application
 public class EnviromentPanel extends JPanel implements ActionListener {
 
-	private static int FISH_NUMBER = 0;
-	private static int PREDATOR_FISH_NUMBER = 1;
+	private static int FISH_NUMBER = 15;
+	private static int PREDATOR_FISH_NUMBER = 2;
 	
-
+			
 	private static ArrayList<PredatorFish> predatorList = new ArrayList<PredatorFish>();				
 	private static ArrayList<Bait> baitList = new ArrayList<Bait>();				//Array list initialized for bait objects
 	private static ArrayList<Fish> fishList = new ArrayList<Fish>();				//Array list initialized for fish objects
@@ -241,28 +241,7 @@ public class EnviromentPanel extends JPanel implements ActionListener {
 			f.draw(g2);
 	}
 	
-	//Calculates closest bait object from arraylist for bait objects
-	public Bait getClosestBait(Fish fishReference) {
-		Bait closestOne = null;																//Sets closest bait to null
-		float closestDistance = 3000F;														//Fish's max detection radius
-		for(Bait b: baitList) {																//Loops through every bait in array list
-			PVector distanceVector = new PVector();
-			
-			PVector.sub(fishReference.getPositionVector(), b.getPos(), distanceVector);
-			float distance = distanceVector.mag();
-			if(distance < closestDistance) {												//Closest one is updated
-				closestDistance = distance;
-				closestOne = b;
-			}
-				
-		}
-		if(closestOne == null) {															//In case a bug happens
-			System.out.println("FAILED TO FETCH CLOSEST BAIT");
-			return null;
-		}
-		
-		return closestOne;
-	}
+
 	
 
 	//When two fish collide, they push each other to opposite directions, bigger one is pushed less compared to smaller one.
@@ -279,12 +258,39 @@ public class EnviromentPanel extends JPanel implements ActionListener {
 	}
 	
 
+	public Fish getClosestFish(PredatorFish predator) {
+		Fish closestOne = null;																//Sets closest bait to null
+		float closestDistance = 3000F;														//Fish's max detection radius
+		for(Fish f: fishList) {																//Loops through every bait in array list
+			PVector distanceVector = new PVector();
+			
+			PVector.sub(predator.getPositionVector(), f.getPositionVector(), distanceVector);
+			float distance = distanceVector.mag();
+			if(distance < closestDistance) {												//Closest one is updated
+				closestDistance = distance;
+				closestOne = f;
+			}
+				
+		}
+		
+		
+		if(predator.hasDetectedFish(closestOne))
+			return closestOne;
+		return null;
+	}
+	
 	
 	
 	//Action Performed function is overridden to animate events
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
+		//for(Fish f: detectedFishList) {
+		//	System.out.print(f);
+				
+		//}
+		//System.out.print(" ");
+		
 		if(predatorList.isEmpty()) {								//When there is no fish present, add a fish
 			for(int i = 0; i<PREDATOR_FISH_NUMBER;i++)
 				predatorList.add(new PredatorFish());
@@ -298,6 +304,50 @@ public class EnviromentPanel extends JPanel implements ActionListener {
 				fishList.add(new Fish());
 			
 		}	
+		outer:
+		for(PredatorFish p: predatorList) {
+			p.checkBoundaries(p);
+			
+			Fish tmp = getClosestFish(p);
+			if(p.isIn) {
+				
+				if(tmp == null) {
+					p.swimIdle();
+					continue outer;
+				}
+				
+				for(Fish f: fishList) {
+					if(p.hasDetectedFish(f) && tmp != null)
+						p.swimToFish(tmp);
+					if(p.hasTouchedFish(f)) {
+						f.killFish();
+						p.getTargetList().remove(f);
+						break;
+					}
+					
+		
+				}
+			}
+			
+			else {
+				System.out.print(panelTest.getX());
+				//System.out.print(p.getPositionVector().y);
+				System.out.print(" ");
+				
+				p.swimToMiddle();
+			
+				if((p.getPositionVector().x > 700 && p.getPositionVector().x < 1220)||
+						(p.getPositionVector().y > 500 && p.getPositionVector().y < 780)) {
+					System.out.print("set");
+					p.setIsIn(true);
+					p.setAccelerationVector(PVector.random2D().normalize());
+				}
+				break;
+			}
+			
+
+				
+		}
 		
 		for(Fish f: fishList) {
 			//Call frame dependent functions
@@ -306,6 +356,9 @@ public class EnviromentPanel extends JPanel implements ActionListener {
 			f.shrinkIfHungry();
 			f.getSick();
 			f.checkBoundaries(f);
+			
+			
+			
 			
 			for(Fish f2:fishList) 								//This statement can be optimized to lessen the cpu cycles, I have chosen to optimize my time
 				if(f2 != f && f2.collides(f)) {
@@ -363,4 +416,3 @@ else {
 	}
 }
 */
-

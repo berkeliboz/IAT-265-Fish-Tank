@@ -165,7 +165,8 @@ public class Fish extends Creature{
 		updateMaxSpeed();																			//Update the speed of the fish reversely proportional to its size
 		isSick = false;																				//Fish's are born healthy
 		setShapeAttributes();																		//Draw the fish
-		randomAcceleration = PVector.random2D().normalize();										//Fish are born with a random acceleration vector
+
+		FOV = new Area(detectionRadiusCircle);
 	
 	}
 	//Constructor for further control [Not used in Assignment 1&2]
@@ -174,6 +175,8 @@ public class Fish extends Creature{
 	}
 	
 
+	public void killFish() {isAlive = false;}
+	
 	public void getSick() {
 		//Sick animal gets grey color
 		if(greyRGBValues == 190 && isSick)
@@ -186,7 +189,7 @@ public class Fish extends Creature{
 					
 			}
 			else {
-				isAlive = false;													//Kill the fish
+				killFish();													//Kill the fish
 			}
 			//Update the color
 			creatureColor = new Color(greyRGBValues, greyRGBValues, greyRGBValues);	
@@ -257,15 +260,7 @@ public class Fish extends Creature{
 	}
 	
 	
-	//Gets last acceleration vector and adds in on speed vector
-	public void swimIdle() {
-		randomAcceleration.limit(MAX_ACCELERATION).mult(2);
-		speedVector.add(randomAcceleration);
-		speedVector.limit(maxVelocity);
-		anchorPoint.add(extraForce);
-		anchorPoint.add(speedVector);									//Adds speed vector to position vector
-		extraForce = new PVector(0,0);		
-	}
+
 	
 	
 
