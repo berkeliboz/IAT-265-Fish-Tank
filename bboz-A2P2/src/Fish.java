@@ -138,14 +138,6 @@ public class Fish extends Creature{
 	private int greyRGBValues = 190;
 	
 
-	private Arc2D fishStripe1;
-	private Arc2D fishStripe2;
-	private Arc2D fishStripe3;
-	private Arc2D fishStripe11;
-	private Arc2D fishStripe21;
-	private Arc2D fishStripe31;
-
-
 	//Default constructor for the fish class
 	public Fish() {
 		super();

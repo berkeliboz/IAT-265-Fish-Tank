@@ -122,7 +122,8 @@ public class PredatorFish extends Creature{
 		acceleration = PVector.sub(f.getPositionVector(), getPositionVector());
 		acceleration.normalize();
 		acceleration.limit(MAX_ACCELERATION);
-		acceleration.mult(2);
+		acceleration.mult(1);
+		
 		
 		speedVector.add(acceleration);
 		speedVector.limit(maxVelocity);

@@ -285,12 +285,6 @@ public class EnviromentPanel extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		//for(Fish f: detectedFishList) {
-		//	System.out.print(f);
-				
-		//}
-		//System.out.print(" ");
-		
 		if(predatorList.isEmpty()) {								//When there is no fish present, add a fish
 			for(int i = 0; i<PREDATOR_FISH_NUMBER;i++)
 				predatorList.add(new PredatorFish());
@@ -321,7 +315,7 @@ public class EnviromentPanel extends JPanel implements ActionListener {
 						p.swimToFish(tmp);
 					if(p.hasTouchedFish(f)) {
 						f.killFish();
-						p.getTargetList().remove(f);
+						
 						break;
 					}
 					
