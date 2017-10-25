@@ -19,9 +19,15 @@ public class CustomRandomizers {
 	}
 	
 	public static PVector getRandomVectorOnPanel() {
-		PVector p;
-		return p = new PVector(Math.abs(((int)(Math.random()*EnviromentPanel.getPanel().getWidth())-150))+150,
-				Math.abs(((int)(Math.random()*EnviromentPanel.getPanel().getHeight())-150))+150);
+		PVector p = new PVector(Math.abs(((int)(Math.random()*EnviromentPanel.getPanel().getWidth())-350))+350,
+				Math.abs(((int)(Math.random()*EnviromentPanel.getPanel().getHeight())-350))+350);
+		 
+		System.out.println(p.x);
+		System.out.println(p.y);
+		System.out.println("-------------");
+		
+		
+		return p;
 	}
 	
 }

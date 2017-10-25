@@ -166,6 +166,9 @@ public class Fish extends Creature{
 		creatureColor = fishColor;
 	}
 	
+	public void gainEnergy(Bait b) {
+		totalEnergy+= b.getBaitSize();
+	}
 
 	public void killFish() {isAlive = false;}
 	
@@ -240,8 +243,10 @@ public class Fish extends Creature{
 				extraForce = new PVector(0,0);
 			}
 			else {	
+				gainEnergy(baitObj);
 				EnviromentPanel.consumeTargetBait(baitObj);						//Consume bait if Fish is considered close
 				grow();
+				
 				hungrySinceFrames = 0;
 				randomAcceleration = PVector.random2D().normalize();
 			}
@@ -262,6 +267,9 @@ public class Fish extends Creature{
 
 	public void draw(Graphics2D g2) {
 		super.draw(g2);
+		
+		//System.out.println(totalEnergy);
+		
 		
 		AffineTransform af = new AffineTransform();
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);

@@ -91,8 +91,8 @@ import processing.core.PVector;
 //This class implements main panel for the application
 public class EnviromentPanel extends JPanel implements ActionListener {
 
-	private static int FISH_NUMBER = 15;
-	private static int PREDATOR_FISH_NUMBER = 2;
+	private static int FISH_NUMBER = 1;
+	private static int PREDATOR_FISH_NUMBER = 0;
 	
 			
 	private static ArrayList<PredatorFish> predatorList = new ArrayList<PredatorFish>();				
@@ -330,8 +330,8 @@ public class EnviromentPanel extends JPanel implements ActionListener {
 				
 				p.swimToMiddle();
 			
-				if((p.getPositionVector().x > 700 && p.getPositionVector().x < 1220)||
-						(p.getPositionVector().y > 500 && p.getPositionVector().y < 780)) {
+				if((p.getPositionVector().x > 200 && p.getPositionVector().x < 1620)||
+						(p.getPositionVector().y > 200 && p.getPositionVector().y < 980)) {
 					System.out.print("set");
 					p.setIsIn(true);
 					p.setAccelerationVector(PVector.random2D().normalize());
@@ -345,8 +345,8 @@ public class EnviromentPanel extends JPanel implements ActionListener {
 		
 		for(Fish f: fishList) {
 			//Call frame dependent functions
+			f.useEnergy();
 			f.updateMaxSpeed();
-			f.increaseHunger();
 			f.shrinkIfHungry();
 			f.getSick();
 			f.checkBoundaries(f);
@@ -381,11 +381,13 @@ public class EnviromentPanel extends JPanel implements ActionListener {
 		if(manualTimer %100 == 0) {													//Spawn a bait every 100 frame
 			spawnBait();
 		}
-		if(manualTimer >= 30000) manualTimer = 0;									//Resets counter in case of overflow
+		if(manualTimer >= 30000) manualTimer = 0;									//Resets counter to avoid overflow
 		
 		
 		manualTimer++;
 		repaint();																	//Used to repaint
+		
+		System.out.println(baitList.size());
 		
 	}
 

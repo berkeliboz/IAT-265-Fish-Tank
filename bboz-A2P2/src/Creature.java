@@ -64,6 +64,8 @@ public class Creature {
 	protected Area boundaryBox;
 	protected Area FOV;
 	
+	protected float totalEnergy;
+	
 	//Represents hunger value for the fish
 	protected int hungrySinceFrames = 0;
 	
@@ -96,6 +98,7 @@ public class Creature {
 
 	protected Arc2D detectionRadiusCircle;
 	
+	protected boolean hasEnergy;
 	protected int detectionRadius = 550;
 
 	protected boolean isIn = true;
@@ -114,6 +117,8 @@ public class Creature {
 	
 	//Default constructor for the default creature type object								[These parameters are very likely to be modified]
 	public Creature() {
+		hasEnergy = true;
+		totalEnergy = 1000f;
 		randomAcceleration = PVector.random2D().normalize();										//Fish are born with a random acceleration vector
 		anchorPoint = new PVector(200, 200);
 		scaleFactor = (int)(Math.random()*10);
@@ -138,7 +143,19 @@ public class Creature {
 	protected int getHunger() {return hungrySinceFrames;}
 	protected void grow() {scaleFactor *=1.1;}
 	protected void shrink() {scaleFactor *=0.9;}
-	protected void increaseHunger() {hungrySinceFrames+=10*scaleFactor;}
+	
+	
+	
+	public void useEnergy() {
+		if(totalEnergy >=5) {
+			totalEnergy-=10*scaleFactor;
+			hasEnergy = true;
+		}
+		else {
+			hungrySinceFrames+=10*scaleFactor;
+			hasEnergy = false;		
+		}
+	}
 	
 	
 	//This extra force vector is added to position vector of the fish when fish collides
@@ -268,6 +285,7 @@ public class Creature {
 				f.anchorPoint.y >= getPanel().getHeight() - f.fishHeight/4||f.anchorPoint.y <= 0 + f.fishHeight) {
 			f.swimToMiddle();
 			f.setIsIn(false);
+			//f.setAccelerationVector(f.acceleration.mult(-1));
 			
 		}
 			
