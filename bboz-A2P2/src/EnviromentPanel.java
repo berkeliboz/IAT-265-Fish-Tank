@@ -324,9 +324,9 @@ public class EnviromentPanel extends JPanel implements ActionListener {
 			}
 			
 			else {
-				System.out.print(panelTest.getX());
+				//System.out.print(panelTest.getX());
 				//System.out.print(p.getPositionVector().y);
-				System.out.print(" ");
+				//System.out.print(" ");
 				
 				p.swimToMiddle();
 			
@@ -387,7 +387,7 @@ public class EnviromentPanel extends JPanel implements ActionListener {
 		manualTimer++;
 		repaint();																	//Used to repaint
 		
-		System.out.println(baitList.size());
+		//System.out.println(baitList.size());
 		
 	}
 

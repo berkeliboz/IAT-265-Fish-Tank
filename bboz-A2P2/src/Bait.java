@@ -123,29 +123,15 @@ public class Bait {
 	public Bait(PVector pos) {
 		this.pos = pos;
 		setShapeAttributes();
-		baitSize = generateBaitSize((int)(Math.random()*3));
-		System.out.println(baitSize);
-		scale = baitSize/100;
-	}
-	
-	
-	private int generateBaitSize(int num) {
-		int returnValue;
-		switch (num) {
-		case 0:
-			returnValue = 100;
-		case 1:
-			returnValue = 200;
-		case 2:
-			returnValue = 250;
-				
-
-		default:
-			returnValue = 100;
-		}
-		return returnValue;
+		baitSize = (int)(Math.random()*100)+100;
+		
+		scale = ((float)baitSize)/100;
 		
 	}
+	
+	
+	
+	
 	
 	
 	//Getters/Setters for baitSize
