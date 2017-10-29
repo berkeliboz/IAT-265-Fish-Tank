@@ -1,3 +1,23 @@
+// IAT 265 - Assignment 3.1
+//Primary Programmer: Berke Boz
+//
+//Class: Predator Fish
+//Superclass: Creature
+//
+//
+//Assignment 3.1 Change Log
+//
+//	- Predator Fish class created
+//
+//	::.. Added Parameters,
+//	-	private boolean fishHunger;
+//	-	private Image fishHeadHappyImage;
+//	-	private Image fishHeadSadImage;
+//	-	private boolean detectionRadiusDrawn = false;
+//	-	private ArrayList<Fish> detectedFishList = new ArrayList();
+//	-	private int outTimer = 0;
+
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -16,11 +36,17 @@ import processing.core.PVector;
 public class PredatorFish extends Creature{
 	
 
-	private boolean fishHunger;
-	private Image fishHeadHappyImage;
+	private boolean fishHunger;													//Will be used in assignment 3.1
+	private Image fishHeadHappyImage;			
 	private Image fishHeadSadImage;
 	
+	private boolean detectionRadiusDrawn = false;								//Visual Debugger
+	
 	private ArrayList<Fish> detectedFishList = new ArrayList();
+	
+	private int outTimer = 0;
+	
+	
 	
 	public PredatorFish() {
 		super();
@@ -31,14 +57,18 @@ public class PredatorFish extends Creature{
 		anchorPoint.x = Math.abs(((int)(Math.random()*EnviromentPanel.getPanel().getWidth())-150));
 		anchorPoint.y = Math.abs(((int)(Math.random()*EnviromentPanel.getPanel().getHeight())-150));
 		creatureColor = new Color(181,29,126);
-		scaleFactor = 1f;
+		scaleFactor = .75f;
 		eyeColor = creatureColor;
 		detectionRadiusCircle = new Arc2D.Double(-detectionRadius/2, -detectionRadius/2, detectionRadius, detectionRadius, 0, 360,Arc2D.PIE);
 		FOV = new Area(detectionRadiusCircle);
 		
 	}
 	
+	//Getters/Setters
 	public ArrayList<Fish> getTargetList(){return detectedFishList;}
+	public int getOutTimer() {return outTimer;}
+	public void setOutTimer(int outTimer) {this.outTimer = outTimer;}
+	
 	
 	
 	@Override
@@ -82,15 +112,10 @@ public class PredatorFish extends Creature{
 				
 		
 	}
+	//Justification: Every value had to shifted for accurate Area detection
 	
-	public boolean hasTouchedFish(Fish f) {
-		if(this.getBoundary().intersects(f.getBoundary().getBounds2D())&&
-				f.getBoundary().intersects(this.getBoundary().getBounds2D()))
-			return true;
-		return false;
-	}
-	
-	
+
+	//Returns true if the detection radius of Predator intersects Fish
 	public boolean hasDetectedFish(Fish f) {
 		if(getFOVBoundary().intersects(f.getBoundary().getBounds2D())&&
 				f.getBoundary().intersects(getFOVBoundary().getBounds2D()))
@@ -100,7 +125,7 @@ public class PredatorFish extends Creature{
 	
 	
 	
-	
+	//Returns FOV transformed shape
 	public Shape getFOVBoundary() {
 		AffineTransform af = new AffineTransform();
 		//Translate the Affine transform
@@ -117,7 +142,7 @@ public class PredatorFish extends Creature{
 		
 	}
 	
-	
+	//Swims to target fish
 	public void swimToFish(Fish f) {
 		acceleration = PVector.sub(f.getPositionVector(), getPositionVector());
 		acceleration.normalize();
@@ -131,6 +156,11 @@ public class PredatorFish extends Creature{
 		
 	}
 	
+	//For visual debugging. (Press Space button to toggle Detection Radius)
+	public void toggleDetectionRadiusDraw() {
+		detectionRadiusDrawn = !detectionRadiusDrawn;
+	}
+
 	
 	@Override
 	public void draw(Graphics2D g) {
@@ -141,37 +171,27 @@ public class PredatorFish extends Creature{
 		
 		AffineTransform af = new AffineTransform();
 		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-		
-		
-
-	
 		g.translate((int)anchorPoint.x, (int)anchorPoint.y);
 		
-		
-		g.draw(detectionRadiusCircle);
+		if(!detectionRadiusDrawn)
+			g.draw(detectionRadiusCircle);
 		
 		
 		g.setColor(Color.black);
-		
-		
 		g.scale(scaleFactor, scaleFactor);
-		
 		float angle = speedVector.heading();									//Point Fish to position vector
 		g.rotate(angle);	
-		
 		if(speedVector.x < 0)
 			g.scale(1, -1);
-				
-		
 		//g.draw(boundaryBox);
 		
+		
+		//Fish hunger will be implemented on next assignment
 		if(fishHunger)
 			g.drawImage(fishHeadSadImage, 110- fishWidth -85 , 40 - fishHeight -75, 70, 70, null);
 		else
 			g.drawImage(fishHeadHappyImage, 110- fishWidth -85 , 40 - fishHeight -75, 70, 70, null);
 
-		
-		//g.fill(detectionRadiusCircle);
 		
 		
 

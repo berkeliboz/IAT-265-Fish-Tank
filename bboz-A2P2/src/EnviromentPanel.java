@@ -77,6 +77,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -89,10 +91,11 @@ import javax.swing.Timer;
 import processing.core.PVector;
 
 //This class implements main panel for the application
-public class EnviromentPanel extends JPanel implements ActionListener {
+public class EnviromentPanel extends JPanel implements ActionListener,KeyListener {
 
-	private static int FISH_NUMBER = 1;
-	private static int PREDATOR_FISH_NUMBER = 0;
+	private static int FISH_NUMBER = 5;
+	private static int PREDATOR_FISH_NUMBER = 2;
+	
 	
 			
 	private static ArrayList<PredatorFish> predatorList = new ArrayList<PredatorFish>();				
@@ -106,6 +109,8 @@ public class EnviromentPanel extends JPanel implements ActionListener {
 	private static JPanel panelTest = new JPanel();									//Panel is created
 	
 	public static JPanel getPanel() {return panelTest;}								//Getter for panel reference
+	
+	private int deadFishTimer = 0;
 	
 	//Getter for middle point of the screen
 	public static PVector middlePoint() {
@@ -169,6 +174,9 @@ public class EnviromentPanel extends JPanel implements ActionListener {
 	public EnviromentPanel(Dimension initialSize) {
 		
 		
+		addKeyListener(this);
+		setFocusable(true);
+		
 		addMouseListener(new MyMouseAdapter() {						//Extend mouse adapter
 	
              public void mousePressed(MouseEvent e)
@@ -213,9 +221,6 @@ public class EnviromentPanel extends JPanel implements ActionListener {
 	public static void consumeTargetBait(Bait b) {
 		baitList.remove(b);
 	}
-	
-	
-	
 	
 	//Spawns bait instance
 	public void spawnBait() {
@@ -273,18 +278,42 @@ public class EnviromentPanel extends JPanel implements ActionListener {
 				
 		}
 		
-		
 		if(predator.hasDetectedFish(closestOne))
 			return closestOne;
 		return null;
 	}
 	
+	//BONUS FUNCTIONALITY HERE
+	public void preserveFishNumber(ArrayList<Fish> arr) {
+		if(arr.size() != FISH_NUMBER) {
+			deadFishTimer++;
+			if(deadFishTimer >= 100) {
+				arr.add(new Fish());
+				deadFishTimer = 0;
+			}
+			
+		}
+		
+	}
+	
+	public void drawDetectionForPredators() {
+		for(PredatorFish p: predatorList) {
+			p.toggleDetectionRadiusDraw();
+		}
+	}
+	
+
+
 	
 	
 	//Action Performed function is overridden to animate events
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
+		
+		
+		preserveFishNumber(fishList);
+		
 		if(predatorList.isEmpty()) {								//When there is no fish present, add a fish
 			for(int i = 0; i<PREDATOR_FISH_NUMBER;i++)
 				predatorList.add(new PredatorFish());
@@ -302,7 +331,23 @@ public class EnviromentPanel extends JPanel implements ActionListener {
 		for(PredatorFish p: predatorList) {
 			p.checkBoundaries(p);
 			
+			
+			
+			
 			Fish tmp = getClosestFish(p);
+			
+			for(Fish f: fishList) {
+				if(p.hasDetectedFish(f) && tmp != null)
+					p.swimToFish(tmp);
+				if(p.collides(f)) {
+					f.killFish();
+					
+					break;
+				}
+				
+	
+			}
+			
 			if(p.isIn) {
 				
 				if(tmp == null) {
@@ -310,37 +355,24 @@ public class EnviromentPanel extends JPanel implements ActionListener {
 					continue outer;
 				}
 				
-				for(Fish f: fishList) {
-					if(p.hasDetectedFish(f) && tmp != null)
-						p.swimToFish(tmp);
-					if(p.hasTouchedFish(f)) {
-						f.killFish();
-						
-						break;
-					}
-					
-		
-				}
 			}
 			
 			else {
-				//System.out.print(panelTest.getX());
-				//System.out.print(p.getPositionVector().y);
-				//System.out.print(" ");
+				int fishOutSince = p.getOutTimer(); 
+				p.setOutTimer(++fishOutSince);
 				
 				p.swimToMiddle();
 			
-				if((p.getPositionVector().x > 200 && p.getPositionVector().x < 1620)||
-						(p.getPositionVector().y > 200 && p.getPositionVector().y < 980)) {
-					System.out.print("set");
-					p.setIsIn(true);
+				System.out.print(p.getOutTimer());
+				
+				if( p.getOutTimer() >= 50) {
+					p.isIn = true;
+					p.setOutTimer(0);
 					p.setAccelerationVector(PVector.random2D().normalize());
 				}
-				break;
 			}
 			
-
-				
+			
 		}
 		
 		for(Fish f: fishList) {
@@ -378,7 +410,7 @@ public class EnviromentPanel extends JPanel implements ActionListener {
 		
 
 		
-		if(manualTimer %100 == 0) {													//Spawn a bait every 100 frame
+		if(manualTimer %85 == 0) {													//Spawn a bait every 100 frame
 			spawnBait();
 		}
 		if(manualTimer >= 30000) manualTimer = 0;									//Resets counter to avoid overflow
@@ -391,24 +423,35 @@ public class EnviromentPanel extends JPanel implements ActionListener {
 		
 	}
 
-}
-
-
-
-
-/// Copied from line 83
-/*
-//If fish object has left the frame/panel this statement draws a new one to the middle of the screen
-if(fishClone == null) {
-	fishClone = new Fish();
-	
-}
-//This statement checks if fish has left the panel/frame
-else {
-	if((fishClone.getXPos() >= this.getSize().width)|| (fishClone.getXPos() <= -1*fishClone.getWidth())||
-			(fishClone.getYPos() > this.getSize().height) || (fishClone.getYPos() <= -1*fishClone.getHeight())) {
-		fishClone = null;
-		fishClone = new Fish();
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+			drawDetectionForPredators();
+			System.out.print("Pressed");
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+			
+			
+		}
+		
+		
+		
 	}
+	
+	
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
-*/
+
+

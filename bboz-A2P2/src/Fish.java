@@ -105,8 +105,36 @@
 //		- A random acceleration vector for each fish is generated
 //
 //
+//Assignment 3.1 Change Log
+//
+//	- Carried parameters
 
-
+//	::.. To Creature class
+//	-	protected PVector acceleration;														
+//	-	protected float scaleFactor;												
+//	-	protected Color creatureColor;															
+//	-	protected boolean isSick = false;
+//	-	protected boolean isAlive = true;
+//	-	protected Arc2D fishHead;
+//	-	protected Arc2D fishEyes;
+//	-	protected Arc2D fishEyeBall;
+//	-	protected Arc2D fishLowerBody;
+//	-	protected Arc2D fishUpperBody;
+//	-	protected Arc2D fishLowerTail1;
+//	-	protected Arc2D fishLowerTail2;
+//	-	protected Arc2D fishLowerTail3;
+//	-	protected Arc2D fishMidTail1;
+//	-	protected Arc2D fishMidTail2;
+//	-	protected Arc2D fishUpperTail1;
+//	-	protected Arc2D fishUpperTail2;
+//	-	protected Arc2D fishUpperTail3;
+//	-	protected Arc2D detectionRadiusCircle;
+//	-	protected boolean hasEnergy;
+//	-	protected int detectionRadius 
+//	-	protected boolean isIn
+//
+//	- Carried linked setters/getters into Creature class	
+//
 //Imported Libraries
 
 import java.awt.BasicStroke;
@@ -140,18 +168,19 @@ public class Fish extends Creature{
 
 	//Default constructor for the fish class
 	public Fish() {
-		super();
+		super();																					//Call default constructor from upper class
 		JPanel panelReference = getPanel();															//Uses the panel reference to reference panel border values
 		fishHeight = 70;
 		fishWidth = 175;
-		anchorPoint.x = Math.abs(((int)(Math.random()*EnviromentPanel.getPanel().getWidth())-150))+150;
-		anchorPoint.y = Math.abs(((int)(Math.random()*EnviromentPanel.getPanel().getHeight())-150))+150;
+		
+		anchorPoint.x = Math.abs(((int)(Math.random()*EnviromentPanel.getPanel().getWidth())-150))+150;		//Generate coordinates random
+		anchorPoint.y = Math.abs(((int)(Math.random()*EnviromentPanel.getPanel().getHeight())-150))+150;	//Generate coordinates random
 		creatureColor = getRandomColor();
 
 		stripeNumber = (int)(Math.random()*4);
 		scaleFactor = (float) (Math.random()*(1f))+0.3f;
 		
-		initialScale = scaleFactor;
+		initialScale = scaleFactor;																	//Previous scale needed for sickness feature
 		extraForce = new PVector(0,0);
 		
 		updateMaxSpeed();																			//Update the speed of the fish reversely proportional to its size
@@ -166,6 +195,7 @@ public class Fish extends Creature{
 		creatureColor = fishColor;
 	}
 	
+	//When fish eats bait, fish gains energy based on size
 	public void gainEnergy(Bait b) {
 		totalEnergy+= b.getBaitSize();
 	}
@@ -180,8 +210,6 @@ public class Fish extends Creature{
 		if(isSick) {
 			if(greyRGBValues >= 10) {
 				greyRGBValues -=1;
-				
-					
 			}
 			else {
 				killFish();													//Kill the fish
@@ -201,7 +229,7 @@ public class Fish extends Creature{
 			shrink();
 			hungrySinceFrames = 0;
 		}
-		
+		//If fish has shrunk less than its initial size, it gets sick
 		if(initialScale/2 > (scaleFactor))
 			isSick = true;
 		
@@ -214,7 +242,6 @@ public class Fish extends Creature{
 	public boolean collides(Bait b) {
 		return (this.getBoundary().intersects(b.getBoundary().getBounds2D())&&
 				b.getBoundary().intersects(this.getBoundary().getBounds2D()));
-	
 	}
 	
 		
@@ -256,24 +283,12 @@ public class Fish extends Creature{
 		
 	}
 	
-	
-
-	
-	
-
-	
-	
-
 
 	public void draw(Graphics2D g2) {
 		super.draw(g2);
 		
-		//System.out.println(totalEnergy);
-		
-		
 		AffineTransform af = new AffineTransform();
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-		
 		
 
 		g2.translate((int)anchorPoint.x, (int)anchorPoint.y);
@@ -304,15 +319,7 @@ public class Fish extends Creature{
 				g2.drawArc(100- fishWidth + 55 - ((i-1)*20), 0 - fishHeight, 140, 140, 180, -23);
 			}
 			
-			
-			
-			
 		}
-		
-		
-
-		
-		
 		
 		g2.setTransform(af);
 		
