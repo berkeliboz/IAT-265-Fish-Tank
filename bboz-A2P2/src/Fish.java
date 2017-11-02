@@ -163,8 +163,7 @@ import processing.core.PVector;
 public class Fish extends Creature{
 
 	private int stripeNumber;																	//Indicates number of Stripes on fish
-	private int greyRGBValues = 190;
-	
+
 
 	//Default constructor for the fish class
 	public Fish() {
@@ -200,40 +199,22 @@ public class Fish extends Creature{
 		totalEnergy+= b.getBaitSize();
 	}
 
-	public void killFish() {isAlive = false;}
-	
-	public void getSick() {
-		//Sick animal gets grey color
-		if(greyRGBValues == 190 && isSick)
-			this.creatureColor = new Color(greyRGBValues, greyRGBValues, greyRGBValues);
-		//Sick fish color gets darker
-		if(isSick) {
-			if(greyRGBValues >= 10) {
-				greyRGBValues -=1;
-			}
-			else {
-				killFish();													//Kill the fish
-			}
-			//Update the color
-			creatureColor = new Color(greyRGBValues, greyRGBValues, greyRGBValues);	
+	@Override
+	public void useEnergy() {
+		if(totalEnergy >=5) {
+			totalEnergy-=10*scaleFactor;
+			hasEnergy = true;
 		}
-	
-	}
-	
-	
-	
-	//If fish is hungry enough for a while, it shrinks. If fish shrinks to half size, it gets sick
-	public void shrinkIfHungry() {
-		//hungrySinceFrames  modified to demonstrate sickness function faster
-		if(hungrySinceFrames >= 900) {
-			shrink();
-			hungrySinceFrames = 0;
+		else {
+			hungrySinceFrames+=10*scaleFactor;
+			hasEnergy = false;		
 		}
-		//If fish has shrunk less than its initial size, it gets sick
-		if(initialScale/2 > (scaleFactor))
-			isSick = true;
-		
 	}
+
+	
+	
+	
+
 	
 
 	

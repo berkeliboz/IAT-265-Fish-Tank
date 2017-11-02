@@ -330,7 +330,14 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 		outer:
 		for(PredatorFish p: predatorList) {
 			p.checkBoundaries(p);
+			p.useEnergy();
+			p.updateMaxSpeed();
+			p.shrinkIfHungry();
+			p.getSick();
 			
+			
+			
+		//	System.out.print(p.getEnergy() + " is total energy ");
 			
 			
 			
@@ -341,6 +348,7 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 					p.swimToFish(tmp);
 				if(p.collides(f)) {
 					f.killFish();
+					p.grow(f.getScaleFactor());
 					
 					break;
 				}
@@ -363,7 +371,6 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 				
 				p.swimToMiddle();
 			
-				System.out.print(p.getOutTimer());
 				
 				if( p.getOutTimer() >= 50) {
 					p.isIn = true;
@@ -372,7 +379,11 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 				}
 			}
 			
-			
+			if(!p.getLifeStatus()) {
+				predatorList.remove(p);
+				break;
+				
+			}
 		}
 		
 		for(Fish f: fishList) {

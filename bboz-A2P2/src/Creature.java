@@ -70,6 +70,11 @@ public class Creature {
 	protected float MAX_ACCELERATION = 0.1f; 
 	protected float maxVelocity = 10f;
 	
+	
+	protected int greyRGBValues = 190;
+	
+	
+	
 	//Represents the area 
 	protected Area boundaryBox;
 	protected Area FOV;
@@ -139,11 +144,23 @@ public class Creature {
 	}
 	
 	//Getter functions
+	protected float getEnergy() {return totalEnergy;}
 	protected int getWidth() {return fishWidth;}
 	protected int getHeight() {return fishHeight;}
 	protected PVector getSpeedVector() {return speedVector;}
 	protected PVector getAccelerationVector() {return acceleration;}
+	
+	
+	//This extra force vector is added to position vector of the fish when fish collides
+	protected PVector extraForce;
+	protected PVector randomAcceleration;
+	
+	protected float initialScale;
+
+	
 	//Setter Functions
+	
+	protected void setEnergy(float totalEnergy) {this.totalEnergy = totalEnergy;}
 	protected void setSpeedVector(PVector speedVector) {this.speedVector = speedVector;}
 	protected void setAccelerationVector(PVector acceleration) {this.acceleration = acceleration;}
 	public void setExtraForce(PVector extraForce) {this.extraForce = extraForce;}
@@ -155,7 +172,43 @@ public class Creature {
 	protected void shrink() {scaleFactor *=0.9;}
 	
 	
-	//
+	public void killFish() {isAlive = false;}
+	
+	public void getSick() {
+		//Sick animal gets grey color
+		if(greyRGBValues == 190 && isSick)
+			this.creatureColor = new Color(greyRGBValues, greyRGBValues, greyRGBValues);
+		//Sick fish color gets darker
+		if(isSick) {
+			if(greyRGBValues >= 10) {
+				greyRGBValues -=1;
+			}
+			else {
+				System.out.print("IS DEAD");
+				System.out.print(isAlive);
+				killFish();													//Kill the fish
+			}
+			//Update the color
+			creatureColor = new Color(greyRGBValues, greyRGBValues, greyRGBValues);	
+		}
+	
+	}
+	
+	//If fish is hungry enough for a while, it shrinks. If fish shrinks to half size, it gets sick
+	public void shrinkIfHungry() {
+		//hungrySinceFrames  modified to demonstrate sickness function faster
+		if(hungrySinceFrames >= 900) {
+			shrink();
+			hungrySinceFrames = 0;
+		}
+		
+		//If fish has shrunk less than its initial size, it gets sick
+		if(initialScale/2 > (scaleFactor))
+			isSick = true;
+		
+	}
+	
+	
 	public void useEnergy() {
 		if(totalEnergy >=5) {
 			totalEnergy-=10*scaleFactor;
@@ -168,12 +221,6 @@ public class Creature {
 	}
 	//Justification: Using energy is a shared functionality between Predator Fish and Non-Predator Fish
 	
-	
-	//This extra force vector is added to position vector of the fish when fish collides
-	protected PVector extraForce;
-	protected PVector randomAcceleration;
-	
-	protected float initialScale;
 
 	
 	public void swimToMiddle() {

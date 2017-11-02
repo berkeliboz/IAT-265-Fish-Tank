@@ -58,6 +58,7 @@ public class PredatorFish extends Creature{
 		anchorPoint.y = Math.abs(((int)(Math.random()*EnviromentPanel.getPanel().getHeight())-150));
 		creatureColor = new Color(181,29,126);
 		scaleFactor = .75f;
+		initialScale = scaleFactor;
 		eyeColor = creatureColor;
 		detectionRadiusCircle = new Arc2D.Double(-detectionRadius/2, -detectionRadius/2, detectionRadius, detectionRadius, 0, 360,Arc2D.PIE);
 		FOV = new Area(detectionRadiusCircle);
@@ -114,7 +115,31 @@ public class PredatorFish extends Creature{
 	}
 	//Justification: Every value had to shifted for accurate Area detection
 	
-
+	
+	public void grow(float size) {
+		if(scaleFactor >= 2)
+			return;
+		scaleFactor*=1.1;
+		//System.out.print(size);
+		scaleFactor+=size/20;
+	}
+	
+	
+	@Override
+	public void shrinkIfHungry() {
+		//hungrySinceFrames  modified to demonstrate sickness function faster
+		if(hungrySinceFrames >= 900) {
+			shrink();
+			hungrySinceFrames = 0;
+		}
+		
+		//If fish has shrunk less than its initial size, it gets sick
+		if(initialScale*0.9 > (scaleFactor))
+			isSick = true;
+		
+	}
+	
+	
 	//Returns true if the detection radius of Predator intersects Fish
 	public boolean hasDetectedFish(Fish f) {
 		if(getFOVBoundary().intersects(f.getBoundary().getBounds2D())&&
@@ -144,6 +169,12 @@ public class PredatorFish extends Creature{
 	
 	//Swims to target fish
 	public void swimToFish(Fish f) {
+		
+		if(isSick) {
+			maxVelocity *= 0.3f;
+		}
+		
+		
 		acceleration = PVector.sub(f.getPositionVector(), getPositionVector());
 		acceleration.normalize();
 		acceleration.limit(MAX_ACCELERATION);
@@ -159,6 +190,7 @@ public class PredatorFish extends Creature{
 	//For visual debugging. (Press Space button to toggle Detection Radius)
 	public void toggleDetectionRadiusDraw() {
 		detectionRadiusDrawn = !detectionRadiusDrawn;
+		System.out.print(isSick);
 	}
 
 	
@@ -166,7 +198,9 @@ public class PredatorFish extends Creature{
 	public void draw(Graphics2D g) {
 		super.draw(g);
 		
-		
+		//System.out.print(totalEnergy);
+		//System.out.print(speedVector.mag() + " is the speed ");
+		System.out.print(this + " scale factor is:" + scaleFactor + " initial scale is:"+ initialScale + System.lineSeparator());
 		
 		
 		AffineTransform af = new AffineTransform();
@@ -187,7 +221,7 @@ public class PredatorFish extends Creature{
 		
 		
 		//Fish hunger will be implemented on next assignment
-		if(fishHunger)
+		if(isSick)
 			g.drawImage(fishHeadSadImage, 110- fishWidth -85 , 40 - fishHeight -75, 70, 70, null);
 		else
 			g.drawImage(fishHeadHappyImage, 110- fishWidth -85 , 40 - fishHeight -75, 70, 70, null);
