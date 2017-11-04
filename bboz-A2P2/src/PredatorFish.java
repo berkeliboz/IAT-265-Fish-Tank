@@ -190,7 +190,7 @@ public class PredatorFish extends Creature{
 	//For visual debugging. (Press Space button to toggle Detection Radius)
 	public void toggleDetectionRadiusDraw() {
 		detectionRadiusDrawn = !detectionRadiusDrawn;
-		System.out.print(isSick);
+	
 	}
 
 	
@@ -200,7 +200,7 @@ public class PredatorFish extends Creature{
 		
 		//System.out.print(totalEnergy);
 		//System.out.print(speedVector.mag() + " is the speed ");
-		System.out.print(this + " scale factor is:" + scaleFactor + " initial scale is:"+ initialScale + System.lineSeparator());
+		//System.out.print(this + " scale factor is:" + scaleFactor + " initial scale is:"+ initialScale + System.lineSeparator());
 		
 		
 		AffineTransform af = new AffineTransform();

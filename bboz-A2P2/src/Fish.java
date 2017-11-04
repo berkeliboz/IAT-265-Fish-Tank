@@ -163,8 +163,12 @@ import processing.core.PVector;
 public class Fish extends Creature{
 
 	private int stripeNumber;																	//Indicates number of Stripes on fish
+	private boolean isEscaping;
+	private boolean FOVDrawn = false;
 
-
+	
+	protected Arc2D FOVCircle;
+	
 	//Default constructor for the fish class
 	public Fish() {
 		super();																					//Call default constructor from upper class
@@ -172,10 +176,14 @@ public class Fish extends Creature{
 		fishHeight = 70;
 		fishWidth = 175;
 		
+		isEscaping = false;
 		anchorPoint.x = Math.abs(((int)(Math.random()*EnviromentPanel.getPanel().getWidth())-150))+150;		//Generate coordinates random
 		anchorPoint.y = Math.abs(((int)(Math.random()*EnviromentPanel.getPanel().getHeight())-150))+150;	//Generate coordinates random
 		creatureColor = getRandomColor();
 
+		FOVCircle = new Arc2D.Double(-detectionRadius/2, -detectionRadius/2, detectionRadius, detectionRadius, 0, 360,Arc2D.PIE);
+		FOV = new Area(FOVCircle);
+		
 		stripeNumber = (int)(Math.random()*4);
 		scaleFactor = (float) (Math.random()*(1f))+0.3f;
 		
@@ -198,11 +206,19 @@ public class Fish extends Creature{
 	public void gainEnergy(Bait b) {
 		totalEnergy+= b.getBaitSize();
 	}
+	
+	public void setIsEscaping(boolean isEscaping) {this.isEscaping = isEscaping;}
+	public boolean isEscaping() {return isEscaping;}
+	
 
+	public void toggleFOV() {
+		FOVDrawn = false;
+	}
+	
 	@Override
 	public void useEnergy() {
 		if(totalEnergy >=5) {
-			totalEnergy-=10*scaleFactor;
+			totalEnergy-=10*scaleFactor*maxVelocity/10f;
 			hasEnergy = true;
 		}
 		else {
@@ -212,11 +228,50 @@ public class Fish extends Creature{
 	}
 
 	
-	
+	public void swimToEscape(PredatorFish fishRef) {
+		if(isEscaping) {
+			FOVDrawn = true;
+			this.acceleration = fishRef.getAccelerationVector().sub(acceleration);
+			acceleration.normalize();
+			acceleration.limit(MAX_ACCELERATION*2);
+			speedVector.add(acceleration);
+			maxVelocity = MAX_VELOCITY*2;
+			speedVector.limit(maxVelocity);
+			anchorPoint.add(speedVector);
+			//isEscaping = false;
+		}
+		
+	}
 	
 
-	
+	public boolean detects(PredatorFish fishRef) {
+	//isEscaping = true;
+	return (this.getFOVBoundary().intersects(fishRef.getBoundary().getBounds2D())&&
+				fishRef.getBoundary().intersects(this.getFOVBoundary().getBounds2D()));
+		
+	}
 
+	
+	public PredatorFish getBestPredator(ArrayList<PredatorFish> fishList) {
+
+		if(fishList.isEmpty()) {System.out.println("No fish found"); return null;}					//Return null if no bait is present
+		
+		PVector distance = new PVector();															//Setup the distance vector
+		PredatorFish bestFish = new PredatorFish();																	//Setup the bait
+		double minDist = 10000000f;
+		for(PredatorFish b:fishList) {
+			double loopFishPts = 0;
+			PVector.sub(b.getPositionVector(),anchorPoint,distance);											//Distance vector = Bait pos vector - creature pos vector 
+			loopFishPts = distance.magSq();
+			
+			if(loopFishPts < minDist) {
+				bestFish = b;
+				minDist = loopFishPts;
+			}
+				
+		}
+		return bestFish;
+	}
 	
 
 	//Return true if both objects collide
@@ -225,6 +280,12 @@ public class Fish extends Creature{
 				b.getBoundary().intersects(this.getBoundary().getBounds2D()));
 	}
 	
+	protected Shape getFOVBoundary() {
+		AffineTransform af = new AffineTransform();
+		af.translate((int)anchorPoint.x, (int)anchorPoint.y);
+			
+		return af.createTransformedShape(FOV);
+	}
 		
 	
 	//Used to create a velocity and acceleration vector between the Fish and Bait object
@@ -273,10 +334,17 @@ public class Fish extends Creature{
 		
 
 		g2.translate((int)anchorPoint.x, (int)anchorPoint.y);
-		g2.scale(scaleFactor, scaleFactor);
+		
 		
 		float angle = speedVector.heading();									//Point Fish to position vector
 		g2.rotate(angle);														//Rotate Fish
+		
+		if(FOVDrawn)
+			g2.draw(FOVCircle);
+		
+		
+		g2.scale(scaleFactor, scaleFactor);
+		
 		
 		//Used to scale -1 times if object changes vector position
 		if(speedVector.x < 0)
@@ -301,6 +369,8 @@ public class Fish extends Creature{
 			}
 			
 		}
+		
+		
 		
 		g2.setTransform(af);
 		

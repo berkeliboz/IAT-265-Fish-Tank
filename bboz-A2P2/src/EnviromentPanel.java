@@ -387,6 +387,8 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 		}
 		
 		for(Fish f: fishList) {
+			
+			
 			//Call frame dependent functions
 			f.useEnergy();
 			f.updateMaxSpeed();
@@ -394,7 +396,13 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 			f.getSick();
 			f.checkBoundaries(f);
 			
-			
+			for(PredatorFish p:predatorList) {
+				if(f.detects(p)) {
+					f.setIsEscaping(true);
+					f.swimToEscape(f.getBestPredator(predatorList));
+				}else{f.setIsEscaping(false);}
+					
+			}
 			
 			
 			for(Fish f2:fishList) 								//This statement can be optimized to lessen the cpu cycles, I have chosen to optimize my time
@@ -403,11 +411,15 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 				}
 					
 			
-			if(!baitList.isEmpty()) {
+			if(!baitList.isEmpty() && !f.isEscaping()) {
 				Bait targetBait = f.getBestBait(baitList);		//Fish swims to best bait
 				f.swimToTarget(targetBait);
+				f.toggleFOV();
 			}
-			else {f.swimIdle();}
+			else if(!f.isEscaping() && baitList.isEmpty()) {
+				f.swimIdle();
+				f.toggleFOV();
+			}
 			
 			
 			if(!f.getLifeStatus()) {							//Clear dead fish
@@ -436,7 +448,7 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+		if(e.getKeyCode() == KeyEvent.VK_SPACE&& e.isShiftDown()) {
 			drawDetectionForPredators();
 			System.out.print("Pressed");
 		}

@@ -68,6 +68,7 @@ public class Creature {
 
 	//Static max values setup
 	protected float MAX_ACCELERATION = 0.1f; 
+	protected float MAX_VELOCITY= 10f;
 	protected float maxVelocity = 10f;
 	
 	
