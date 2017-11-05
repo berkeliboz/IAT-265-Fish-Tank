@@ -14,8 +14,7 @@ import processing.core.PVector;
 public class CustomRandomizers {
 
 	public static PVector getRandomNormalizedAccelerationVector() {
-		PVector p;
-		return p = new PVector((int)(Math.random()*100)-100,(int)(Math.random()*100)-100).normalize();
+		return new PVector((int)(Math.random()*100)-100,(int)(Math.random()*100)-100).normalize();
 	}
 	
 	public static PVector getRandomVectorOnPanel() {

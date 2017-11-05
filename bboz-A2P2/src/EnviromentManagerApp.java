@@ -1,4 +1,4 @@
-// IAT 265 - Assignment 2.1
+// IAT 265 - Assignment 3.2
 //Primary Programmer: Berke Boz
 //
 //Class: EnviromentManagerApp
@@ -16,14 +16,19 @@
 //
 //	- None
 //
-//Imported Libraries
-import java.awt.Color;
+//Assignment 3 Change Log
+//
+//	- None
+//
+
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 public class EnviromentManagerApp extends JFrame{
+
+	private static final long serialVersionUID = 1L;
+
 
 	//This constructor acts as an driver function for the project
 	public EnviromentManagerApp(String title) {
@@ -41,7 +46,7 @@ public class EnviromentManagerApp extends JFrame{
 	
 	
 	public static void main(String[] args) {
-		EnviromentManagerApp app = new EnviromentManagerApp("Demo");				//Runs the application
+		new EnviromentManagerApp("Demo");				//Runs the application
 		
 		
 		

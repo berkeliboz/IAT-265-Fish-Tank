@@ -1,4 +1,4 @@
-// IAT 265 - Assignment 2.1
+// IAT 265 - Assignment 3.2
 //Primary Programmer: Berke Boz
 //
 //Class: fish
@@ -135,6 +135,18 @@
 //
 //	- Carried linked setters/getters into Creature class	
 //
+//
+//
+//Assignment 3.2 Change Log
+//
+//	- isEscaping: Boolean added
+//
+//	- New Getters and Setters added
+//	- toggleFOV() added
+//	- swimToEscape() added
+//
+//	- Draw info added
+//
 //Imported Libraries
 
 import java.awt.BasicStroke;
@@ -230,14 +242,17 @@ public class Fish extends Creature{
 	}
 
 	
-	
+	//Fish swims to the other direction of Predator fish
 	public void swimToEscape(PredatorFish fishRef) {
 		if(isEscaping) {
+			
+			//Draw FOV
 			FOVDrawn = true;
 			
 			float sumVectorLen = acceleration.add(fishRef.acceleration).magSq();
 			float absoluteSumVectorLen = acceleration.magSq()+fishRef.acceleration.magSq();
 			
+			//Compare absolute sum of vectors to normal sum to determine the acceleration direction
 			if(absoluteSumVectorLen > sumVectorLen) {
 				this.acceleration = fishRef.getAccelerationVector().mult(2);
 			}else {
@@ -250,40 +265,18 @@ public class Fish extends Creature{
 			maxVelocity = MAX_VELOCITY*2;
 			speedVector.limit(maxVelocity);
 			anchorPoint.add(speedVector);
-			//isEscaping = false;
 		}
 		
 	}
 	
-
+	//Returns true if Fish detects a predator fish
 	public boolean detects(PredatorFish fishRef) {
-	//isEscaping = true;
 	return (this.getFOVBoundary().intersects(fishRef.getBoundary().getBounds2D())&&
 				fishRef.getBoundary().intersects(this.getFOVBoundary().getBounds2D()));
 		
 	}
 
 	
-	public PredatorFish getBestPredator(ArrayList<PredatorFish> fishList) {
-
-		if(fishList.isEmpty()) {System.out.println("No fish found"); return null;}					//Return null if no bait is present
-		
-		PVector distance = new PVector();															//Setup the distance vector
-		PredatorFish bestFish = new PredatorFish();																	//Setup the bait
-		double minDist = 10000000f;
-		for(PredatorFish b:fishList) {
-			double loopFishPts = 0;
-			PVector.sub(b.getPositionVector(),anchorPoint,distance);											//Distance vector = Bait pos vector - creature pos vector 
-			loopFishPts = distance.magSq();
-			
-			if(loopFishPts < minDist) {
-				bestFish = b;
-				minDist = loopFishPts;
-			}
-				
-		}
-		return bestFish;
-	}
 
 	//Return true if both objects collide
 	public boolean collides(Bait b) {
@@ -391,15 +384,21 @@ public class Fish extends Creature{
 			AffineTransform at = new AffineTransform();
 			
 			Color defaultColor = g2.getColor();
-			g2.setColor(Color.black);
+			g2.setColor(Color.BLACK);
 			g2.translate((int)anchorPoint.x, (int)anchorPoint.y);
 			
 			Font f = new Font("Arial", Font.BOLD, 12); //NEW LINE
 		    g2.setFont(f); //NEW LINE
 		    String energyInfo =String.format("%.2f", totalEnergy);
-		    //String hungerInfo =String.format("%.2f", hungrySinceFrames); 
+		    String SpeedInfo =String.format("%.2f", speedVector.mag());
+		    
+		    
+		    if(hungrySinceFrames <= 15)hungrySinceFrames = 0;
 			g2.drawString("Total Energy is:" +energyInfo, -fishHeight, -50);  //-Float.toString(totalEnergy).length()/2
-			g2.drawString("Fish is hungry since:" +hungrySinceFrames + " frames", -fishHeight, -75);  //-Float.toString(totalEnergy).length()/2
+			g2.drawString("Fish is hungry since:" +hungrySinceFrames + " frames", -fishHeight, -65);  //-Float.toString(totalEnergy).length()/2
+			g2.drawString("Fish speed is:" + SpeedInfo, -fishHeight, -80);  //-Float.toString(totalEnergy).length()/2
+			
+		
 			
 			g2.setColor(defaultColor);
 			

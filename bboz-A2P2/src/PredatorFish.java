@@ -1,4 +1,4 @@
-// IAT 265 - Assignment 3.1
+// IAT 265 - Assignment 3.2
 //Primary Programmer: Berke Boz
 //
 //Class: Predator Fish
@@ -16,7 +16,13 @@
 //	-	private boolean detectionRadiusDrawn = false;
 //	-	private ArrayList<Fish> detectedFishList = new ArrayList();
 //	-	private int outTimer = 0;
-
+//
+//Assignment 3.2 Change Log
+//
+//	- grow() added
+//	- Bug Fixed: Creature class draw wasn't inherited correctly because of the absence of required data
+//		- now inherits draw() correctly from Creature class 
+//
 
 import java.awt.Color;
 import java.awt.Font;
@@ -48,7 +54,7 @@ public class PredatorFish extends Creature{
 	private int outTimer = 0;
 	
 	
-	
+	//Default constructor
 	public PredatorFish() {
 		super();
 		maxVelocity = 5f;
@@ -77,22 +83,22 @@ public class PredatorFish extends Creature{
 	protected void setShapeAttributes() {
 		super.setShapeAttributes();
 		try {
-			fishHeadHappyImage = ImageIO.read(new File("Images/happy.png"));
-			fishHeadSadImage = ImageIO.read(new File("Images/sad.png"));
+			fishHeadHappyImage = ImageIO.read(new File("Images/happy.png"));				//Fetch icons
+			fishHeadSadImage = ImageIO.read(new File("Images/sad.png"));					//Fetch icons
 		}catch (Exception e) {
 			System.out.print("fishHeadNotFound");	
 		}
 	}
 	//Justification: Fish is a creature of creature class
 	
-	
+	//When Predator eats a fish, it grows and gains energy according to the size of the fish
 	public void grow(float size) {
 		hungrySinceFrames = 0;
 		totalEnergy+=size*1000;
+		//Limit grow
 		if(scaleFactor >= 1.7f)
 			return;
 		scaleFactor*=1.1;
-		//System.out.print(size);
 		scaleFactor+=size/20;
 	}
 	
@@ -144,29 +150,26 @@ public class PredatorFish extends Creature{
 	//Swims to target fish
 	public void swimToFish(Fish f) {
 		
+		//If fish is sick, swims slow
 		if(isSick) {
 			maxVelocity *= 0.3f;
 		}
-		
 		try {
 			acceleration = PVector.sub(f.getPositionVector(), getPositionVector());
 			acceleration.normalize();
 			acceleration.limit(MAX_ACCELERATION);
 			acceleration.mult(1);
-			
-			
 			speedVector.add(acceleration);
 			speedVector.limit(maxVelocity);
 			anchorPoint.add(speedVector);
 		} catch (Exception e) {
-			// TODO: handle exception
+
 		}
 	}
 	
 	//For visual debugging. (Press Space button to toggle Detection Radius)
 	public void toggleDetectionRadiusDraw() {
 		detectionRadiusDrawn = !detectionRadiusDrawn;
-	
 	}
 
 	
@@ -184,47 +187,42 @@ public class PredatorFish extends Creature{
 			g.draw(detectionRadiusCircle);
 		
 		
-		
-		
 		g.setColor(Color.black);
 		g.scale(scaleFactor, scaleFactor);
 		float angle = speedVector.heading();									//Point Fish to position vector
 		g.rotate(angle);	
 		if(speedVector.x < 0)
 			g.scale(1, -1);
-		//g.draw(boundaryBox);
 		
-		
-		//Fish hunger will be implemented on next assignment
+		//If fish is sick, fish uses sad image
 		if(isSick)
-			g.drawImage(fishHeadSadImage, 110- fishWidth -85 , 40 - fishHeight -75, 70, 70, null);
+			g.drawImage(fishHeadSadImage, 110- fishWidth +65 , 40 - fishHeight -11, 70, 70, null);
 		else
 			g.drawImage(fishHeadHappyImage, 110- fishWidth +65 , 40 - fishHeight -11, 70, 70, null);
 
 		g.setTransform(af);
 
-		
 		if(infoDrawn) {
 
-	
 			g.translate((int)anchorPoint.x, (int)anchorPoint.y);
 
 			Color defaultColor = g.getColor();
 			g.setColor(Color.black);
 			Font f = new Font("Arial", Font.BOLD, 12); //NEW LINE
-		    g.setFont(f); //NEW LINE
-		    String energyInfo =String.format("%.2f", totalEnergy);
-		    if(hungrySinceFrames <= 15)hungrySinceFrames = 0;
-			g.drawString("Total Energy is:" +energyInfo, -fishHeight, -50);  //-Float.toString(totalEnergy).length()/2
-			g.drawString("Fish is hungry since:" +hungrySinceFrames + " frames", -fishHeight, -75);  //-Float.toString(totalEnergy).length()/2
+		    g.setFont(f); 
+		    String energyInfo =String.format("%.2f", totalEnergy);					//Print out energy info
+		    String SpeedInfo =String.format("%.2f", speedVector.mag());				//Print out speed info
+		    
+		    
+		    if(hungrySinceFrames <= 15)hungrySinceFrames = 0;	
+			g.drawString("Total Energy is:" +energyInfo, -fishHeight, -50);  
+			g.drawString("Fish is hungry since:" +hungrySinceFrames + " frames", -fishHeight, -65);  
+			g.drawString("Fish speed is:" + SpeedInfo, -fishHeight, -80); 
+			
 			g.setColor(defaultColor);
 			
 		}
-				
-		
 		g.setTransform(af);
-
-		
 	}
 	
 	

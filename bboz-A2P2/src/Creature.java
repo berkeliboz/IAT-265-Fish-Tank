@@ -43,9 +43,20 @@
 //
 //	- Getters/Setters updated
 //
-//
-//
-//
+//	:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//	::::.....................ENERGY MODEL FUNCTIONALITY MODIFIED.......................::::
+//	:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::	 
+//	:::::::	- Now all fishes have Hunger Timer and Total Energy counter.			:::::::
+//	::::::: - When Fish is out of energy, hunger timer starts.						:::::::
+//	::::::: 	- If hunger timer is more than 900 frames, fish shrinks				:::::::
+//	::::::: 	- Hunger timer is restarts from 0, but energy is not replenished.	:::::::
+//	::::::: - Energy is increases only if when Fish consumes another fish or bait	:::::::
+//	:::::::		- Hunger timer is set to zero when fish is fed						:::::::
+//	::::::: - If fish shrinks to half of its size, it gets sick. 					:::::::
+//	::::::: 	- No recovery condition is implemented.								:::::::
+//	:::::::		- For Predator Fish, sickness threshold is much lower.				:::::::
+//	:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//	:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //Imported Libraries
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -317,7 +328,7 @@ public class Creature {
 	
 	//Checks boundaries for Fish object
 	public static void checkBoundaries(Creature f) {
-		JPanel panelReference = getPanel();
+		getPanel();
 
 		if((f.anchorPoint.x >= getPanel().getWidth() - f.fishWidth/4)||f.anchorPoint.x <= 0 + f.fishWidth||
 				f.anchorPoint.y >= getPanel().getHeight() - f.fishHeight/4||f.anchorPoint.y <= 0 + f.fishHeight) {
@@ -508,44 +519,6 @@ public class Creature {
 
 
 
-
-
-
-
-
-
-
-
-
-
-/*
-if(f.anchorPoint.x >= getPanel().getWidth() - f.fishWidth/4) {			//Checks for right side of screen	
-	//f.acceleration.x = -1;												//Reverse acceleration
-	//f.speedVector.add(f.acceleration);
-	f.swimToMiddle();
-	f.setIsIn(false);
-}
-if(f.anchorPoint.x <= 0 + f.fishWidth) {								//Checks for left side of screen
-	//f.acceleration.x = 1;												//Reverse acceleration
-	//f.speedVector.add(f.acceleration);
-	f.swimToMiddle();
-	f.setIsIn(false);
-}
-	
-if(f.anchorPoint.y >= getPanel().getHeight() - f.fishHeight/4) {		//Checks for bottom of screen
-	//f.acceleration.y = -1;												//Reverse acceleration
-	//f.speedVector.add(f.acceleration);
-	f.swimToMiddle();
-	f.setIsIn(false);
-}
-
-if(f.anchorPoint.y <= 0 + f.fishHeight) {								//Checks for top of the screen
-	//f.acceleration.y = 1;												//Reverse acceleration
-	//f.speedVector.add(f.acceleration);
-	f.swimToMiddle();
-	f.setIsIn(false);
-}
-*/
 
 
 

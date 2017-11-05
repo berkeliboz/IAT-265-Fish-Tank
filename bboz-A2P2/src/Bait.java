@@ -1,4 +1,4 @@
-// IAT 265 - Assignment 2.1
+// IAT 265 - Assignment 3.2
 //Primary Programmer: Berke Boz
 //
 //Class: Bait

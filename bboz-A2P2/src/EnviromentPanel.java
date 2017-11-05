@@ -1,4 +1,4 @@
-// IAT 265 - Assignment 2.1
+// IAT 265 - Assignment 3.2
 //Primary Programmer: Berke Boz
 //
 //Class: EnviromentPanel
@@ -70,6 +70,31 @@
 //
 //
 //
+//Assignment 3.2 Change Log
+//
+//	::New Parameters
+//	- globalDrowInfo: Boolean	added
+//	- creatures: ArrayList<Creature>  added
+//		- Holds a copy of current objects on the screen
+//	- shiftDown: Boolean	added
+//
+//	
+// - actionPerformed(ActionEvent e) modified
+//		- Modified behaviors of both fish types.
+//		- Bonus functionality added.							-----------------> See the loop staring from line 453
+//			- BUG: Sometimes fish swims into the predator fish instead of going to other direction and doesnt draws FOV/Detection Radius when this happens.
+//				
+//
+//
+//	- mouseClicked() edited
+//		- now mouseClicked() toggles draw info for all creatures
+//	- checkIfOccupiedCreature(), checkIfOccupiedFish() and checkIfOccupiedPredator() added
+//	- drawDetectionForPredators() added
+//		- Use Shift+Space key combination to test
+//
+//
+//
+//
 //Imported Libraries
 import java.awt.Color;
 import java.awt.Dimension;
@@ -94,14 +119,13 @@ import processing.core.PVector;
 //This class implements main panel for the application
 public class EnviromentPanel extends JPanel implements ActionListener,KeyListener {
 
-	private static int FISH_NUMBER = 5;
-	private static int PREDATOR_FISH_NUMBER = 3;
+	private static int FISH_NUMBER = 10;
+	private static int PREDATOR_FISH_NUMBER = 2;
 	
 	private static ArrayList<Creature> creatures = new ArrayList<Creature>();
-		
-	private boolean globalDrawInfo = false;
+	private boolean globalDrawInfo = false;											//Holds a copy of current objects on the screen
 	
-	private static ArrayList<PredatorFish> predatorList = new ArrayList<PredatorFish>();				
+	private static ArrayList<PredatorFish> predatorList = new ArrayList<PredatorFish>();//Array list initialized for PredatorFish objects				
 	private static ArrayList<Bait> baitList = new ArrayList<Bait>();				//Array list initialized for bait objects
 	private static ArrayList<Fish> fishList = new ArrayList<Fish>();				//Array list initialized for fish objects
 	private Bait bait;																//Bait is auto created by this class
@@ -114,7 +138,6 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 	public static JPanel getPanel() {return panelTest;}								//Getter for panel reference
 	
 	private int deadFishTimer = 0;
-	
 	private boolean shiftDown = false;
 	
 	//Getter for middle point of the screen
@@ -136,14 +159,9 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 	    	else {
 	    		createBait(e);					//Creates bait obj at clicked location
 		    	selectBait(e);					//Selects bait obj at clicked location
-		    		
 	    	}	
-	    	
-	    	
-	    	
 	    }
 	}
-	
 	
 	
 	//This function checks if the clicked box is empty of not
@@ -215,7 +233,6 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 				}
 				if(e.isControlDown())
 					consumeTargetBait(b);			//Delete bait obj
-			
 		}
 	}
 		
@@ -225,9 +242,8 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 	//Setup Main Panel for the application
 	public EnviromentPanel(Dimension initialSize) {
 		
-		
-		addKeyListener(this);
-		setFocusable(true);
+		addKeyListener(this);										//Add key listener
+		setFocusable(true);											//Set focusable
 		
 		addMouseListener(new MyMouseAdapter() {						//Extend mouse adapter
 	
@@ -258,10 +274,7 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
                  }
              }
              
-		}
-		);
-
-
+		});
 		
 		panelTest.setBounds(0,0 , initialSize.width-300, initialSize.height-300);	//Panel uses the same bounds with Frame [Subject to change later]
 		t = new Timer(33, this);													//Used to start timer to generate Frames
@@ -335,7 +348,7 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 		return null;
 	}
 	
-	//BONUS FUNCTIONALITY HERE
+	//This function preserves total Fish number by using a timer that works on FPS
 	public void preserveFishNumber(ArrayList<Fish> arr) {
 		if(arr.size() != FISH_NUMBER) {
 			deadFishTimer++;
@@ -347,7 +360,8 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 		}
 		
 	}
-	
+	//Toggles detection radius draw for Predators
+	//Use Shift+Space key combination to test
 	public void drawDetectionForPredators() {
 		for(PredatorFish p: predatorList) {
 			p.toggleDetectionRadiusDraw();
@@ -362,16 +376,15 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		creatures.removeAll(creatures);
-		creatures.addAll(predatorList);
+		creatures.removeAll(creatures);								//Empties the list to update in every frame
+		creatures.addAll(predatorList);								//Adds predators to list
 				
 
-		preserveFishNumber(fishList);
-		creatures.addAll(fishList);
+		preserveFishNumber(fishList);								//Add new fishes if there are missing fishes
+		creatures.addAll(fishList);									//Adds fishes to list
 		
 		if(predatorList.isEmpty()) {								//When there is no fish present, add a fish
 			for(int i = 0; i<PREDATOR_FISH_NUMBER;i++)
-				
 				predatorList.add(new PredatorFish());
 				creatures.add(predatorList.get(predatorList.size()-1));
 		}	
@@ -382,31 +395,25 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 			for(int i = 0; i<FISH_NUMBER;i++)
 				fishList.add(new Fish());
 				creatures.add(fishList.get(fishList.size()-1));
-				//System.out.println(creatures.size());
 	
 		}	
-		outer:
+		outer:													//GOTO Label
 		for(PredatorFish p: predatorList) {
+			//Update functions for predators
 			p.checkBoundaries(p);
 			p.useEnergy();
 			p.updateMaxSpeed();
 			p.shrinkIfHungry();
 			p.getSick();
 			
-			
-			
-		//	System.out.print(p.getEnergy() + " is total energy ");
-			
-			
-			
-			Fish tmp = getClosestFish(p);
-			
+
+			Fish tmp = getClosestFish(p);						//Predators swim to the closest fish
 			for(Fish f: fishList) {
 				if(p.hasDetectedFish(f) )
 					p.swimToFish(tmp);
-				if(p.collides(f)) {
+				if(p.collides(f)) {								//If predator touches the fish
 					f.killFish();
-					p.grow(f.getScaleFactor());
+					p.grow(f.getScaleFactor());					//Grow
 					
 					break;
 				}
@@ -414,38 +421,36 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 	
 			}
 			
-			if(p.isIn) {
+			if(p.isIn) {										//If predator is inside boundaries
 				
 				if(tmp == null) {
 					p.swimIdle();
-					continue outer;
+					continue outer;								//This is GOTO control for Java
 				}
 				
 			}
 			
 			else {
-				int fishOutSince = p.getOutTimer(); 
+				int fishOutSince = p.getOutTimer(); 			//When fish goes out of screen borders a timer starts. Fish swims to the middle of the screen during the timer.
 				p.setOutTimer(++fishOutSince);
-				
 				p.swimToMiddle();
-			
 				
-				if( p.getOutTimer() >= 50) {
+				if( p.getOutTimer() >= 45) {
 					p.isIn = true;
 					p.setOutTimer(0);
-					p.setAccelerationVector(PVector.random2D().normalize());
+					p.setAccelerationVector(PVector.random2D().normalize());	//Gives the fish a randomized and normalized vector
 				}
 			}
 			
 			if(!p.getLifeStatus()) {
-				predatorList.remove(p);
+				predatorList.remove(p);							//Kills predator
 				break;
 				
 			}
 		}
 		
+		//															BONUS FUNCTIONALITY CODE IN THIS LOOP
 		for(Fish f: fishList) {
-			
 			
 			//Call frame dependent functions
 			f.useEnergy();
@@ -454,10 +459,11 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 			f.getSick();
 			f.checkBoundaries(f);
 			
+			
 			for(PredatorFish p:predatorList) {
-				if(f.detects(p)) {
-					f.setIsEscaping(true);
-					f.swimToEscape(p); //.getBestPredator(predatorList)
+				if(f.detects(p)) {								//if fish detects a predator, is starts swimming faster to another direction 
+					f.setIsEscaping(true);												
+					f.swimToEscape(p); 
 				}else{f.setIsEscaping(false);}
 					
 			}
@@ -475,7 +481,7 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 				f.toggleFOV();
 			}
 			else if(!f.isEscaping() && baitList.isEmpty()) {
-				f.swimIdle();
+				f.swimIdle();									//Swims idle
 				f.toggleFOV();
 			}
 			
@@ -496,60 +502,37 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 		}
 		if(manualTimer >= 30000) manualTimer = 0;									//Resets counter to avoid overflow
 		
-		
-		
+		//This next 6 lines are used for toggling information
+		for(PredatorFish c: predatorList) {
+			c.infoDrawn = globalDrawInfo;
+		}
+		for(Fish c: fishList) {
+			c.infoDrawn = globalDrawInfo;
+		}
 	
 		manualTimer++;
 		repaint();																	//Used to repaint
-		
-		//System.out.println(baitList.size());
-		
 	}
-
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_SPACE&& e.isShiftDown()) {
 			drawDetectionForPredators();
-		
 		}
 		
 		if(e.getKeyCode() == KeyEvent.VK_D&& e.isShiftDown()) {
 			globalDrawInfo = !globalDrawInfo;
-			for(PredatorFish c: predatorList) {
-				c.infoDrawn = globalDrawInfo;
-			}
-			for(Fish c: fishList) {
-				c.infoDrawn = globalDrawInfo;
-			}
-		
 		}
-		
-		
-		if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-			
-			
-		}
-		
 		if(e.isShiftDown())
-			shiftDown = true;
-		
-		
-		
+			shiftDown = true;														//Shift is presseed
 	}
-	
-	
 	@Override
 	public void keyReleased(KeyEvent b) {
-		
-		shiftDown = false;
+		shiftDown = false;															//Shift is released
 		}
-
 	@Override
 	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		
 	}
-
 }
 
 
