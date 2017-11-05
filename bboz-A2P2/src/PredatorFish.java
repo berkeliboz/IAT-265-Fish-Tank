@@ -94,7 +94,7 @@ public class PredatorFish extends Creature{
 	//When Predator eats a fish, it grows and gains energy according to the size of the fish
 	public void grow(float size) {
 		hungrySinceFrames = 0;
-		totalEnergy+=size*1000;
+		totalEnergy+=size*1000;				
 		//Limit grow
 		if(scaleFactor >= 1.7f)
 			return;
@@ -214,7 +214,7 @@ public class PredatorFish extends Creature{
 		    String SpeedInfo =String.format("%.2f", speedVector.mag());				//Print out speed info
 		    
 		    
-		    if(hungrySinceFrames <= 15)hungrySinceFrames = 0;	
+		   
 			g.drawString("Total Energy is:" +energyInfo, -fishHeight, -50);  
 			g.drawString("Fish is hungry since:" +hungrySinceFrames + " frames", -fishHeight, -65);  
 			g.drawString("Fish speed is:" + SpeedInfo, -fishHeight, -80); 

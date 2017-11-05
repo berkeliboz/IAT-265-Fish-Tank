@@ -503,13 +503,16 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 		if(manualTimer >= 30000) manualTimer = 0;									//Resets counter to avoid overflow
 		
 		//This next 6 lines are used for toggling information
+		if(!shiftDown) {
+			
+		
 		for(PredatorFish c: predatorList) {
 			c.infoDrawn = globalDrawInfo;
 		}
 		for(Fish c: fishList) {
 			c.infoDrawn = globalDrawInfo;
 		}
-	
+		}
 		manualTimer++;
 		repaint();																	//Used to repaint
 	}
