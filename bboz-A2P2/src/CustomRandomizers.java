@@ -22,9 +22,7 @@ public class CustomRandomizers {
 		PVector p = new PVector(Math.abs(((int)(Math.random()*EnviromentPanel.getPanel().getWidth())-350))+350,
 				Math.abs(((int)(Math.random()*EnviromentPanel.getPanel().getHeight())-350))+350);
 		 
-		//System.out.println(p.x);
-		//System.out.println(p.y);
-		//System.out.println("-------------");
+
 		
 		
 		return p;

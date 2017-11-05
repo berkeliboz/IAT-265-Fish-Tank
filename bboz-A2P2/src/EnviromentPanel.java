@@ -81,6 +81,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
 import java.util.TimerTask;
 
@@ -94,10 +95,12 @@ import processing.core.PVector;
 public class EnviromentPanel extends JPanel implements ActionListener,KeyListener {
 
 	private static int FISH_NUMBER = 5;
-	private static int PREDATOR_FISH_NUMBER = 2;
+	private static int PREDATOR_FISH_NUMBER = 3;
 	
+	private static ArrayList<Creature> creatures = new ArrayList<Creature>();
+		
+	private boolean globalDrawInfo = false;
 	
-			
 	private static ArrayList<PredatorFish> predatorList = new ArrayList<PredatorFish>();				
 	private static ArrayList<Bait> baitList = new ArrayList<Bait>();				//Array list initialized for bait objects
 	private static ArrayList<Fish> fishList = new ArrayList<Fish>();				//Array list initialized for fish objects
@@ -112,6 +115,8 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 	
 	private int deadFishTimer = 0;
 	
+	private boolean shiftDown = false;
+	
 	//Getter for middle point of the screen
 	public static PVector middlePoint() {
 		PVector mid = new PVector((int)panelTest.getWidth()/2,(int)panelTest.getHeight()/2);
@@ -122,17 +127,64 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 	//Extends Mouse adapter
 	private class MyMouseAdapter extends MouseAdapter {
 	    public void mouseClicked(MouseEvent e) {
-	    	createBait(e);					//Creates bait obj at clicked location
-	    	selectBait(e);					//Selects bait obj at clicked location
+
+	    	
+	    	Creature tmpFish = checkIfOccupiedCreature(e);
+	    	
+	    	if(tmpFish != null && shiftDown)
+	    		tmpFish.toggleDrawInfo();
+	    	else {
+	    		createBait(e);					//Creates bait obj at clicked location
+		    	selectBait(e);					//Selects bait obj at clicked location
+		    		
+	    	}	
+	    	
+	    	
 	    	
 	    }
 	}
+	
+	
 	
 	//This function checks if the clicked box is empty of not
 	public Bait checkIfOccupied(MouseEvent e) {
 		for(Bait b:baitList) {
 			if((Math.abs(e.getX() - b.getPos().x) < (b.getWidth()/2) * (b.getScale()))&&	//Check object borders
 				Math.abs(e.getY() - b.getPos().y) < (b.getWidth()/2) * (b.getScale()))
+				return b;
+		}
+		return null;
+	}
+
+	//This function checks if the clicked box is empty of not
+	public Creature checkIfOccupiedCreature(MouseEvent e) {
+		for(Creature b: creatures) {
+	
+			if((Math.abs(e.getX() - b.getXPos()) < (b.getWidth()/2) * (b.getScaleFactor()))&&	//Check object borders
+				Math.abs(e.getY() - b.getYPos()) < (b.getWidth()/2) * (b.getScaleFactor()))
+				return b;
+		}
+		return null;
+	}
+	
+	
+	//This function checks if the clicked box is empty of not
+	public PredatorFish checkIfOccupiedPredator(MouseEvent e) {
+		for(PredatorFish b: predatorList) {
+	
+			if((Math.abs(e.getX() - b.getXPos()) < (b.getWidth()/2) * (b.getScaleFactor()))&&	//Check object borders
+				Math.abs(e.getY() - b.getYPos()) < (b.getWidth()/2) * (b.getScaleFactor()))
+				return b;
+		}
+		return null;
+	}
+	
+	//This function checks if the clicked box is empty of not
+	public Fish checkIfOccupiedFish(MouseEvent e) {
+		for(Fish b: fishList) {
+
+			if((Math.abs(e.getX() - b.getXPos()) < (b.getWidth()/2) * (b.getScaleFactor()))&&	//Check object borders
+				Math.abs(e.getY() - b.getYPos()) < (b.getWidth()/2) * (b.getScaleFactor()))
 				return b;
 		}
 		return null;
@@ -145,7 +197,7 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
     		PVector position = new PVector(e.getX(), e.getY());
     		Bait bait = new Bait(position);
     		baitList.add(bait);
-    			
+
     	}
 		
 		
@@ -310,14 +362,18 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		
-		
+		creatures.removeAll(creatures);
+		creatures.addAll(predatorList);
+				
+
 		preserveFishNumber(fishList);
+		creatures.addAll(fishList);
 		
 		if(predatorList.isEmpty()) {								//When there is no fish present, add a fish
 			for(int i = 0; i<PREDATOR_FISH_NUMBER;i++)
+				
 				predatorList.add(new PredatorFish());
-			
+				creatures.add(predatorList.get(predatorList.size()-1));
 		}	
 		
 		
@@ -325,7 +381,9 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 		if(fishList.isEmpty()) {								//When there is no fish present, add a fish
 			for(int i = 0; i<FISH_NUMBER;i++)
 				fishList.add(new Fish());
-			
+				creatures.add(fishList.get(fishList.size()-1));
+				//System.out.println(creatures.size());
+	
 		}	
 		outer:
 		for(PredatorFish p: predatorList) {
@@ -344,7 +402,7 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 			Fish tmp = getClosestFish(p);
 			
 			for(Fish f: fishList) {
-				if(p.hasDetectedFish(f) && tmp != null)
+				if(p.hasDetectedFish(f) )
 					p.swimToFish(tmp);
 				if(p.collides(f)) {
 					f.killFish();
@@ -399,7 +457,7 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 			for(PredatorFish p:predatorList) {
 				if(f.detects(p)) {
 					f.setIsEscaping(true);
-					f.swimToEscape(f.getBestPredator(predatorList));
+					f.swimToEscape(p); //.getBestPredator(predatorList)
 				}else{f.setIsEscaping(false);}
 					
 			}
@@ -433,12 +491,14 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 		
 
 		
-		if(manualTimer %85 == 0) {													//Spawn a bait every 100 frame
+		if(manualTimer %50 == 0) {													//Spawn a bait every 100 frame
 			spawnBait();
 		}
 		if(manualTimer >= 30000) manualTimer = 0;									//Resets counter to avoid overflow
 		
 		
+		
+	
 		manualTimer++;
 		repaint();																	//Used to repaint
 		
@@ -450,13 +510,28 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_SPACE&& e.isShiftDown()) {
 			drawDetectionForPredators();
-			System.out.print("Pressed");
+		
 		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_D&& e.isShiftDown()) {
+			globalDrawInfo = !globalDrawInfo;
+			for(PredatorFish c: predatorList) {
+				c.infoDrawn = globalDrawInfo;
+			}
+			for(Fish c: fishList) {
+				c.infoDrawn = globalDrawInfo;
+			}
+		
+		}
+		
 		
 		if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 			
 			
 		}
+		
+		if(e.isShiftDown())
+			shiftDown = true;
 		
 		
 		
@@ -464,10 +539,10 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 	
 	
 	@Override
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+	public void keyReleased(KeyEvent b) {
 		
-	}
+		shiftDown = false;
+		}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {

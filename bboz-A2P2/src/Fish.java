@@ -140,6 +140,7 @@
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -165,6 +166,7 @@ public class Fish extends Creature{
 	private int stripeNumber;																	//Indicates number of Stripes on fish
 	private boolean isEscaping;
 	private boolean FOVDrawn = false;
+
 
 	
 	protected Arc2D FOVCircle;
@@ -228,10 +230,20 @@ public class Fish extends Creature{
 	}
 
 	
+	
 	public void swimToEscape(PredatorFish fishRef) {
 		if(isEscaping) {
 			FOVDrawn = true;
-			this.acceleration = fishRef.getAccelerationVector().sub(acceleration);
+			
+			float sumVectorLen = acceleration.add(fishRef.acceleration).magSq();
+			float absoluteSumVectorLen = acceleration.magSq()+fishRef.acceleration.magSq();
+			
+			if(absoluteSumVectorLen > sumVectorLen) {
+				this.acceleration = fishRef.getAccelerationVector().mult(2);
+			}else {
+				this.acceleration = fishRef.getAccelerationVector().mult(-2);
+			}
+			
 			acceleration.normalize();
 			acceleration.limit(MAX_ACCELERATION*2);
 			speedVector.add(acceleration);
@@ -272,7 +284,6 @@ public class Fish extends Creature{
 		}
 		return bestFish;
 	}
-	
 
 	//Return true if both objects collide
 	public boolean collides(Bait b) {
@@ -324,6 +335,7 @@ public class Fish extends Creature{
 		}
 		
 	}
+
 	
 
 	public void draw(Graphics2D g2) {
@@ -374,7 +386,31 @@ public class Fish extends Creature{
 		
 		g2.setTransform(af);
 		
+		if(infoDrawn) {
+		
+			AffineTransform at = new AffineTransform();
+			
+			Color defaultColor = g2.getColor();
+			g2.setColor(Color.black);
+			g2.translate((int)anchorPoint.x, (int)anchorPoint.y);
+			
+			Font f = new Font("Arial", Font.BOLD, 12); //NEW LINE
+		    g2.setFont(f); //NEW LINE
+		    String energyInfo =String.format("%.2f", totalEnergy);
+		    //String hungerInfo =String.format("%.2f", hungrySinceFrames); 
+			g2.drawString("Total Energy is:" +energyInfo, -fishHeight, -50);  //-Float.toString(totalEnergy).length()/2
+			g2.drawString("Fish is hungry since:" +hungrySinceFrames + " frames", -fishHeight, -75);  //-Float.toString(totalEnergy).length()/2
+			
+			g2.setColor(defaultColor);
+			
+			
+			
+			
+			}
+		g2.setTransform(af);	
 	}
+	
+	
 	
 	
 	

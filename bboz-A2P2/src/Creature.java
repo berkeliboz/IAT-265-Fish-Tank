@@ -50,6 +50,7 @@
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
@@ -74,7 +75,7 @@ public class Creature {
 	
 	protected int greyRGBValues = 190;
 	
-	
+	protected boolean infoDrawn = true;
 	
 	//Represents the area 
 	protected Area boundaryBox;
@@ -134,6 +135,8 @@ public class Creature {
 	//Default constructor for the default creature type object								[These parameters are very likely to be modified]
 	public Creature() {
 		hasEnergy = true;
+		fishHeight = 70;
+		fishWidth = 175;
 		totalEnergy = 1000f;
 		randomAcceleration = PVector.random2D().normalize();										//Fish are born with a random acceleration vector
 		anchorPoint = new PVector(200, 200);
@@ -328,6 +331,11 @@ public class Creature {
 		
 	}
 	
+	public void toggleDrawInfo() {
+		infoDrawn = !infoDrawn;
+	}
+	
+	
 	//Return shape value for intersection check
 	protected Shape getBoundary() {
 		AffineTransform af = new AffineTransform();
@@ -358,12 +366,11 @@ public class Creature {
 		Stroke defaultStroke = g2.getStroke();
 		
 		
-	
+		
 
 		g2.setColor(darkOrange);
 		
 		g2.translate((int)anchorPoint.x, (int)anchorPoint.y);
-		
 		
 		
 		
@@ -435,7 +442,10 @@ public class Creature {
 		g2.setColor(Color.pink);
 		
 		
+		
+		
 		g2.setTransform(af);
+		
 		
 		
 		//Visual Debuggers
@@ -491,6 +501,7 @@ public class Creature {
 	}
 	//Justification: This function is used by normal fish for this assignment only. But however, this function has been kept on creature class for future functionality for predator class
 
+	
 	
 }
 

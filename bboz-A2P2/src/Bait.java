@@ -55,6 +55,14 @@
 //		- Makes the all the object transformations to return bait's boundary box
 //
 //
+//
+//Assignment 3.2 Change Log
+//
+//	- 
+//
+//
+//
+//
 //Imported Libraries
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -231,21 +239,11 @@ public class Bait {
 		g.setStroke(new BasicStroke(1));
 		g.setColor(Color.red);
 
-											//Previous Drawing Code is commented out
-		
-		//Triangle 1 Points													//Draws outer trianlge
-		//int[] triangle1X = { 0 ,-width/2,width/2};						
-		//int[] triangle1Y = {-height/2,height/2,height/2};
-		//g.drawPolygon(triangle1X, triangle1Y, 3);
-		//g.fillPolygon(triangle1X, triangle1Y, 3);
 		g.fill(outerPoly);
 		//Triangle 2 Points													//Draws inner triangle
 		g.setColor(Color.yellow);
 		g.rotate(Math.PI);
-		//int[] triangle2X = {0,-width/4,width/4,0};
-		//int[] triangle2Y = {0,-height/2,- height/2,0};
-		//g.drawPolygon(triangle2X, triangle2Y, 3);
-		//g.fillPolygon(triangle2X, triangle2Y, 3);		
+	
 		g.fill(innerPoly);
 
 	

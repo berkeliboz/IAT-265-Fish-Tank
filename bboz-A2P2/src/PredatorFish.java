@@ -19,6 +19,7 @@
 
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
@@ -39,7 +40,7 @@ public class PredatorFish extends Creature{
 	private boolean fishHunger;													//Will be used in assignment 3.1
 	private Image fishHeadHappyImage;			
 	private Image fishHeadSadImage;
-	
+
 	private boolean detectionRadiusDrawn = false;								//Visual Debugger
 	
 	private ArrayList<Fish> detectedFishList = new ArrayList();
@@ -51,7 +52,7 @@ public class PredatorFish extends Creature{
 	public PredatorFish() {
 		super();
 		maxVelocity = 5f;
-		detectionRadius = 1000;
+		detectionRadius = 750;
 		setShapeAttributes();
 		fishHunger = false;
 		anchorPoint.x = Math.abs(((int)(Math.random()*EnviromentPanel.getPanel().getWidth())-150));
@@ -81,43 +82,14 @@ public class PredatorFish extends Creature{
 		}catch (Exception e) {
 			System.out.print("fishHeadNotFound");	
 		}
-		
-		fishHead = new Arc2D.Double(110- fishWidth -85 , 40 - fishHeight -65, 60, 60, 0, 360,Arc2D.PIE);
-		fishEyes = new Arc2D.Double(140- fishWidth-85 , 50 - fishHeight-65, 20, 20, 0, 360,Arc2D.PIE);
-		fishEyeBall = new Arc2D.Double(147- fishWidth-85 , 57 - fishHeight-65, 12, 13, 0, 360,Arc2D.PIE);
-		fishLowerBody = new Arc2D.Double(50- fishWidth-85 , 65 - fishHeight-65, 100, 40, 0, 360,Arc2D.PIE);
-		fishUpperBody = new Arc2D.Double(50- fishWidth-85 , 35 - fishHeight-65, 100, 40, 0, 360,Arc2D.PIE);
-		fishLowerTail1 = new Arc2D.Double(0- fishWidth-85 , 80 - fishHeight-65, 60, 60, 45, 90,Arc2D.PIE);
-		fishLowerTail2 = new Arc2D.Double(0- fishWidth -85, 80 - fishHeight-70, 60, 60, 45, 90,Arc2D.PIE);
-		fishLowerTail3 = new Arc2D.Double(0- fishWidth -85, 80 - fishHeight-15-65, 60, 60, 45, 90,Arc2D.PIE);
-		fishMidTail1 = new Arc2D.Double(0- fishWidth -85, 40 - fishHeight-65, 60, 60, 135, 90,Arc2D.PIE);
-		fishMidTail2 = new Arc2D.Double(50- fishWidth -85, 60 - fishHeight-65, 20, 20, 0, 360,Arc2D.PIE);
-		fishUpperTail1 = new Arc2D.Double(0 - fishWidth -85, 0 - fishHeight-65, 60, 60, 225, 90,Arc2D.PIE);
-		fishUpperTail2 = new Arc2D.Double(0 - fishWidth -85, 0 - fishHeight+ 5-65, 60, 60, 225, 90,Arc2D.PIE);
-		fishUpperTail3 = new Arc2D.Double(0 - fishWidth -85, 0 - fishHeight+ 15-65, 60, 60, 225, 90,Arc2D.PIE);
-	
-		//Added the area of each part
-		boundaryBox = new Area(fishHead);
-		boundaryBox.add(new Area(fishEyes));
-		boundaryBox.add(new Area(fishEyeBall));
-		boundaryBox.add(new Area(fishLowerBody));
-		boundaryBox.add(new Area(fishUpperBody));
-		boundaryBox.add(new Area(fishLowerTail1));
-		boundaryBox.add(new Area(fishLowerTail2));
-		boundaryBox.add(new Area(fishLowerTail3));
-		boundaryBox.add(new Area(fishMidTail1));
-		boundaryBox.add(new Area(fishMidTail2));
-		boundaryBox.add(new Area(fishUpperTail1));
-		boundaryBox.add(new Area(fishUpperTail2));
-		boundaryBox.add(new Area(fishUpperTail3));
-				
-		
 	}
-	//Justification: Every value had to shifted for accurate Area detection
+	//Justification: Fish is a creature of creature class
 	
 	
 	public void grow(float size) {
-		if(scaleFactor >= 2)
+		hungrySinceFrames = 0;
+		totalEnergy+=size*1000;
+		if(scaleFactor >= 1.7f)
 			return;
 		scaleFactor*=1.1;
 		//System.out.print(size);
@@ -167,6 +139,8 @@ public class PredatorFish extends Creature{
 		
 	}
 	
+	
+	
 	//Swims to target fish
 	public void swimToFish(Fish f) {
 		
@@ -174,17 +148,19 @@ public class PredatorFish extends Creature{
 			maxVelocity *= 0.3f;
 		}
 		
-		
-		acceleration = PVector.sub(f.getPositionVector(), getPositionVector());
-		acceleration.normalize();
-		acceleration.limit(MAX_ACCELERATION);
-		acceleration.mult(1);
-		
-		
-		speedVector.add(acceleration);
-		speedVector.limit(maxVelocity);
-		anchorPoint.add(speedVector);
-		
+		try {
+			acceleration = PVector.sub(f.getPositionVector(), getPositionVector());
+			acceleration.normalize();
+			acceleration.limit(MAX_ACCELERATION);
+			acceleration.mult(1);
+			
+			
+			speedVector.add(acceleration);
+			speedVector.limit(maxVelocity);
+			anchorPoint.add(speedVector);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 	
 	//For visual debugging. (Press Space button to toggle Detection Radius)
@@ -198,10 +174,7 @@ public class PredatorFish extends Creature{
 	public void draw(Graphics2D g) {
 		super.draw(g);
 		
-		//System.out.print(totalEnergy);
-		//System.out.print(speedVector.mag() + " is the speed ");
-		//System.out.print(this + " scale factor is:" + scaleFactor + " initial scale is:"+ initialScale + System.lineSeparator());
-		
+	
 		
 		AffineTransform af = new AffineTransform();
 		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
@@ -209,6 +182,8 @@ public class PredatorFish extends Creature{
 		
 		if(!detectionRadiusDrawn)
 			g.draw(detectionRadiusCircle);
+		
+		
 		
 		
 		g.setColor(Color.black);
@@ -224,17 +199,36 @@ public class PredatorFish extends Creature{
 		if(isSick)
 			g.drawImage(fishHeadSadImage, 110- fishWidth -85 , 40 - fishHeight -75, 70, 70, null);
 		else
-			g.drawImage(fishHeadHappyImage, 110- fishWidth -85 , 40 - fishHeight -75, 70, 70, null);
-
-		
-		
+			g.drawImage(fishHeadHappyImage, 110- fishWidth +65 , 40 - fishHeight -11, 70, 70, null);
 
 		g.setTransform(af);
+
 		
+		if(infoDrawn) {
+
+	
+			g.translate((int)anchorPoint.x, (int)anchorPoint.y);
+
+			Color defaultColor = g.getColor();
+			g.setColor(Color.black);
+			Font f = new Font("Arial", Font.BOLD, 12); //NEW LINE
+		    g.setFont(f); //NEW LINE
+		    String energyInfo =String.format("%.2f", totalEnergy);
+		    if(hungrySinceFrames <= 15)hungrySinceFrames = 0;
+			g.drawString("Total Energy is:" +energyInfo, -fishHeight, -50);  //-Float.toString(totalEnergy).length()/2
+			g.drawString("Fish is hungry since:" +hungrySinceFrames + " frames", -fishHeight, -75);  //-Float.toString(totalEnergy).length()/2
+			g.setColor(defaultColor);
+			
+		}
+				
+		
+		g.setTransform(af);
+
 		
 	}
 	
 	
+
 	
 	
 }
