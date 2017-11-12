@@ -129,11 +129,14 @@ public class Creature {
 	protected boolean hasEnergy;
 	protected int detectionRadius = 550;
 
+	private boolean isChoosen = false;
+	
 	protected boolean isIn = true;
 	
 	public void setIsIn(boolean isIn) {this.isIn = isIn;}
 	public boolean getIsIn() {return isIn;}
 	
+	public PVector getAnchorPts() {return anchorPoint;}
 	
 	//Getter functions
 	public int getXPos() {return (int) anchorPoint.x;}											
@@ -142,6 +145,10 @@ public class Creature {
 	public static JPanel getPanel() {return EnviromentPanel.getPanel();}
 	public PVector getPositionVector() {return anchorPoint;}
 	public boolean getLifeStatus() {return isAlive;}
+	
+	public void sickenFish() {isSick = true;}
+	
+	public boolean getSicknessStatus() {return isSick;}
 	
 	//Default constructor for the default creature type object								[These parameters are very likely to be modified]
 	public Creature() {
@@ -165,6 +172,9 @@ public class Creature {
 	protected PVector getSpeedVector() {return speedVector;}
 	protected PVector getAccelerationVector() {return acceleration;}
 	
+	protected void setIsChoosenFalse() {isChoosen = false;}
+	protected void setIsChoosenTrue() {isChoosen = true;}
+	
 	
 	//This extra force vector is added to position vector of the fish when fish collides
 	protected PVector extraForce;
@@ -179,7 +189,8 @@ public class Creature {
 	protected void setSpeedVector(PVector speedVector) {this.speedVector = speedVector;}
 	protected void setAccelerationVector(PVector acceleration) {this.acceleration = acceleration;}
 	public void setExtraForce(PVector extraForce) {this.extraForce = extraForce;}
-	
+	public void setHungrySinceFrames(int hungrySinceFrames) {this.hungrySinceFrames = hungrySinceFrames;}
+	public void setAnchorPoint(PVector anchorPoint) {this.anchorPoint = anchorPoint;}
 	
 	//Hunger level related functions
 	protected int getHunger() {return hungrySinceFrames;}
@@ -190,6 +201,8 @@ public class Creature {
 	public void killFish() {isAlive = false;}
 	
 	public void getSick() {
+		
+	
 		//Sick animal gets grey color
 		if(greyRGBValues == 190 && isSick)
 			this.creatureColor = new Color(greyRGBValues, greyRGBValues, greyRGBValues);
@@ -364,6 +377,16 @@ public class Creature {
 	}
 	
 	
+
+	public void highlightFish(Graphics2D g2) {
+		Color defC = g2.getColor();
+		g2.setColor(Color.GREEN);
+		Stroke def = g2.getStroke();
+		g2.setStroke(new BasicStroke(10));
+		g2.draw(boundaryBox);
+		g2.setStroke(def);
+		g2.setColor(defC);
+	}
 	
 	public void draw(Graphics2D g2) {
 		
@@ -375,7 +398,6 @@ public class Creature {
 		
 		Color darkOrange = new Color(255, 140, 0);
 		Stroke defaultStroke = g2.getStroke();
-		
 		
 		
 
@@ -397,7 +419,10 @@ public class Creature {
 		g2.setColor(creatureColor);
 		//Upper Tail
 		
-
+		
+		if(isChoosen)
+			highlightFish(g2);
+		
 		g2.fill(fishUpperTail1);
 		g2.setStroke(new BasicStroke(10));
 		g2.fill(fishUpperTail2);
@@ -452,7 +477,7 @@ public class Creature {
 		
 		g2.setColor(Color.pink);
 		
-		
+	
 		
 		
 		g2.setTransform(af);
@@ -490,6 +515,12 @@ public class Creature {
 	//Justification: This function is used by normal fish for this assignment only. But however, this function has been kept on creature class for future functionality for predator class
 	
 
+	
+	
+	public String getClassName() {
+		String non = "N/A";
+		return non;
+	}
 	
 	public Bait getBestBait(ArrayList<Bait> baitList) {
 

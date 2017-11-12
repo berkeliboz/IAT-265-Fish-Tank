@@ -111,6 +111,7 @@ import java.util.ArrayList;
 import java.util.TimerTask;
 
 import javax.security.auth.x500.X500Principal;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -119,8 +120,10 @@ import processing.core.PVector;
 //This class implements main panel for the application
 public class EnviromentPanel extends JPanel implements ActionListener,KeyListener {
 
-	private static int FISH_NUMBER = 10;
-	private static int PREDATOR_FISH_NUMBER = 2;
+	public static int FISH_NUMBER = 10;
+	public static int PREDATOR_FISH_NUMBER = 2;
+	public static int maxBaitNumber = 20;
+	
 	
 	private static ArrayList<Creature> creatures = new ArrayList<Creature>();
 	private boolean globalDrawInfo = false;											//Holds a copy of current objects on the screen
@@ -135,10 +138,33 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 	
 	private static JPanel panelTest = new JPanel();									//Panel is created
 	
+	public static ArrayList<PredatorFish> getPredatorList() {
+		return predatorList;
+	}
+	
+	public static ArrayList<Fish> getFishList() {
+		return fishList;
+	}
+	
+	public static ArrayList<Bait> getBaitList() {
+		return baitList;
+	}
+	
 	public static JPanel getPanel() {return panelTest;}								//Getter for panel reference
 	
 	private int deadFishTimer = 0;
 	private boolean shiftDown = false;
+	
+	private static Creature highlightedCreature = new Creature();
+	
+	public static boolean isPanelDrawn = true;
+
+	private static ControlPanel controlPanel;
+	
+	public static Creature getHighlightedCreature() {
+		return highlightedCreature;
+	}
+
 	
 	//Getter for middle point of the screen
 	public static PVector middlePoint() {
@@ -156,8 +182,16 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 	    	
 	    	if(tmpFish != null && shiftDown)
 	    		tmpFish.toggleDrawInfo();
+	    	else if(tmpFish != null && !shiftDown){
+	    		
+	    		highlightedCreature = tmpFish;
+
+	    		
+	    	}
+	    	
 	    	else {
-	    		createBait(e);					//Creates bait obj at clicked location
+	    		if(baitList.size() < maxBaitNumber)
+	    			createBait(e);				//Creates bait obj at clicked location
 		    	selectBait(e);					//Selects bait obj at clicked location
 	    	}	
 	    }
@@ -211,7 +245,7 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 	//Creates a bait instance if clicked square is empty
 	public void createBait(MouseEvent e) {
 		Bait baitReference = checkIfOccupied(e);						//Checks if clicked place is not occupied
-    	if(baitReference == null){										//If clicked place if empty, add new bait obj
+    	if(baitReference == null && baitList.size()<= maxBaitNumber){	//If clicked place if empty, add new bait obj
     		PVector position = new PVector(e.getX(), e.getY());
     		Bait bait = new Bait(position);
     		baitList.add(bait);
@@ -240,7 +274,10 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 	
 	
 	//Setup Main Panel for the application
-	public EnviromentPanel(Dimension initialSize) {
+	public EnviromentPanel(Dimension initialSize,ControlPanel cp) {
+		super();
+		
+		controlPanel = cp;
 		
 		addKeyListener(this);										//Add key listener
 		setFocusable(true);											//Set focusable
@@ -303,12 +340,20 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 		setBackground(Color.cyan);													//Sets the background to Cyan color
 		Graphics2D g2 = (Graphics2D)g;
 		
-		for(Fish f: fishList)
+		for(Fish f: fishList) {
 			f.draw(g2);
+			f.setIsChoosenFalse();		
+		}
 		for(Bait b: baitList)
 			b.draw(g2);
-		for(PredatorFish f: predatorList)
+		for(PredatorFish f: predatorList) {
 			f.draw(g2);
+			f.setIsChoosenFalse();
+		}
+			
+		
+		controlPanel.update(this);
+		
 	}
 	
 
@@ -370,6 +415,36 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 	
 
 
+	public static void generatePredatorFish() {
+		
+		if(predatorList.size() < PREDATOR_FISH_NUMBER) {
+			predatorList.add(new PredatorFish());
+			creatures.add(predatorList.get(predatorList.size()-1));
+		
+		}
+		
+	}
+	
+	public static void generateFish() {
+		
+		if(fishList.size() < FISH_NUMBER) {
+			fishList.add(new Fish());
+			creatures.add(fishList.get(fishList.size()-1));		
+	
+		}
+		
+		
+		
+	}
+	
+	public static void killFish() {
+		fishList.remove(fishList.size()-1);
+		creatures.remove(creatures.size()-1);
+	}
+	public static void killPredatorFish() {
+		predatorList.remove(predatorList.size()-1);
+		creatures.remove(creatures.size()-1);
+	}
 	
 	
 	//Action Performed function is overridden to animate events
@@ -405,16 +480,14 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 			p.updateMaxSpeed();
 			p.shrinkIfHungry();
 			p.getSick();
-			
-
+		
 			Fish tmp = getClosestFish(p);						//Predators swim to the closest fish
 			for(Fish f: fishList) {
 				if(p.hasDetectedFish(f) )
 					p.swimToFish(tmp);
 				if(p.collides(f)) {								//If predator touches the fish
 					f.killFish();
-					p.grow(f.getScaleFactor());					//Grow
-					
+					p.grow(f.getScaleFactor());					//Grow	
 					break;
 				}
 				
@@ -459,7 +532,6 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 			f.getSick();
 			f.checkBoundaries(f);
 			
-			
 			for(PredatorFish p:predatorList) {
 				if(f.detects(p)) {								//if fish detects a predator, is starts swimming faster to another direction 
 					f.setIsEscaping(true);												
@@ -497,10 +569,12 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 		
 
 		
-		if(manualTimer %50 == 0) {													//Spawn a bait every 100 frame
+		if(manualTimer %50 == 0 && baitList.size() < maxBaitNumber) {				//Spawn a bait every 100 frame
 			spawnBait();
 		}
 		if(manualTimer >= 30000) manualTimer = 0;									//Resets counter to avoid overflow
+		
+		
 		
 		//This next 6 lines are used for toggling information
 		if(!shiftDown) {
@@ -513,6 +587,10 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 			c.infoDrawn = globalDrawInfo;
 		}
 		}
+		
+		
+		
+		
 		manualTimer++;
 		repaint();																	//Used to repaint
 	}
@@ -527,6 +605,11 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 		}
 		if(e.isShiftDown())
 			shiftDown = true;														//Shift is presseed
+		if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+			isPanelDrawn = !isPanelDrawn;
+		}
+		
+		
 	}
 	@Override
 	public void keyReleased(KeyEvent b) {

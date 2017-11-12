@@ -149,27 +149,14 @@
 //
 //Imported Libraries
 
-import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Shape;
-import java.awt.Stroke;
-import java.awt.Toolkit;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
-import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.Vector;
-
-import javax.swing.JPanel;
-
 import processing.core.PVector;
 
 
@@ -186,7 +173,6 @@ public class Fish extends Creature{
 	//Default constructor for the fish class
 	public Fish() {
 		super();																					//Call default constructor from upper class
-		JPanel panelReference = getPanel();															//Uses the panel reference to reference panel border values
 		fishHeight = 70;
 		fishWidth = 175;
 		
@@ -199,7 +185,7 @@ public class Fish extends Creature{
 		FOV = new Area(FOVCircle);
 		
 		stripeNumber = (int)(Math.random()*4);
-		scaleFactor = (float) (Math.random()*(1f))+0.3f;
+		scaleFactor = (float) (Math.random()*(0.5f))+0.3f;
 		
 		initialScale = scaleFactor;																	//Previous scale needed for sickness feature
 		extraForce = new PVector(0,0);
@@ -241,13 +227,18 @@ public class Fish extends Creature{
 		}
 	}
 
+	@Override 
+	public String getClassName() {
+		String non = "Fish";
+		return non;
+	}
 	
 	//Fish swims to the other direction of Predator fish
 	public void swimToEscape(PredatorFish fishRef) {
 		if(isEscaping) {
 			
 			//Draw FOV
-			FOVDrawn = true;
+			//FOVDrawn = true;
 			
 			float sumVectorLen = acceleration.add(fishRef.acceleration).magSq();
 			float absoluteSumVectorLen = acceleration.magSq()+fishRef.acceleration.magSq();

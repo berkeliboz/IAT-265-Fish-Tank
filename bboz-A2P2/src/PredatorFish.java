@@ -64,7 +64,7 @@ public class PredatorFish extends Creature{
 		anchorPoint.x = Math.abs(((int)(Math.random()*EnviromentPanel.getPanel().getWidth())-150));
 		anchorPoint.y = Math.abs(((int)(Math.random()*EnviromentPanel.getPanel().getHeight())-150));
 		creatureColor = new Color(181,29,126);
-		scaleFactor = .75f;
+		scaleFactor = .25f;
 		initialScale = scaleFactor;
 		eyeColor = creatureColor;
 		detectionRadiusCircle = new Arc2D.Double(-detectionRadius/2, -detectionRadius/2, detectionRadius, detectionRadius, 0, 360,Arc2D.PIE);
@@ -102,6 +102,11 @@ public class PredatorFish extends Creature{
 		scaleFactor+=size/20;
 	}
 	
+	@Override 
+	public String getClassName() {
+		String non = "Predator Fish";
+		return non;
+	}
 	
 	@Override
 	public void shrinkIfHungry() {
