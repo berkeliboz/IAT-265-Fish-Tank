@@ -53,10 +53,12 @@ public class PredatorFish extends Creature{
 	
 	private int outTimer = 0;
 	
-	
+        
+        
 	//Default constructor
 	public PredatorFish() {
 		super();
+                
 		maxVelocity = 5f;
 		detectionRadius = 750;
 		setShapeAttributes();
@@ -162,13 +164,14 @@ public class PredatorFish extends Creature{
 		try {
 			acceleration = PVector.sub(f.getPositionVector(), getPositionVector());
 			acceleration.normalize();
-			acceleration.limit(MAX_ACCELERATION);
 			acceleration.mult(1);
-			speedVector.add(acceleration);
+                        acceleration.limit(MAX_ACCELERATION);
+			speedVector.limit(maxVelocity);
+                        speedVector.add(acceleration);
 			speedVector.limit(maxVelocity);
 			anchorPoint.add(speedVector);
 		} catch (Exception e) {
-
+                   
 		}
 	}
 	

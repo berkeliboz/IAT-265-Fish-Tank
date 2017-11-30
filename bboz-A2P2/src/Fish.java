@@ -170,6 +170,38 @@ public class Fish extends Creature{
 	
 	protected Arc2D FOVCircle;
 	
+         public Fish(float scaleFactor, Color creatureColor,int stripeNumber, int posX,int posY, float totalEnergy, boolean isSick, int detectionRadius,int energyUsage, float maxVelocity){
+            super();
+            this.maxVelocity = maxVelocity;
+            this.energyUsageOverTime = energyUsage;
+            fishHeight = 70;
+            fishWidth = 175;	
+            isEscaping = false;
+            this.detectionRadius = detectionRadius;
+            FOVCircle = new Arc2D.Double(-detectionRadius/2, -detectionRadius/2, detectionRadius, detectionRadius, 0, 360,Arc2D.PIE);
+            FOV = new Area(FOVCircle);
+            anchorPoint.x = posX;
+            anchorPoint.y = posY;
+            this.stripeNumber = stripeNumber;
+            this.creatureColor = creatureColor;
+            this.scaleFactor = scaleFactor;
+            initialScale = scaleFactor;	
+            extraForce = new PVector(0,0);
+		
+            updateMaxSpeed();																			//Update the speed of the fish reversely proportional to its size
+            this.isSick = isSick;																			//Fish's are born healthy
+            setShapeAttributes();																		//Draw the fish
+
+            FOV = new Area(detectionRadiusCircle);
+            
+        }
+        
+        
+       
+        
+        
+        
+        
 	//Default constructor for the fish class
 	public Fish() {
 		super();																					//Call default constructor from upper class
@@ -296,10 +328,10 @@ public class Fish extends Creature{
 				
 				acceleration.limit(MAX_ACCELERATION);							//Limit Acceleration
 				
-				acceleration.setMag(1f);										//Sets magnitude of Acceleration
+				acceleration.setMag(10f);										//Sets magnitude of Acceleration
 				
 				speedVector.add(acceleration);									//Adds Acceleration to Speed Vector
-				
+				speedVector.setMag(10f);
 				speedVector.limit(maxVelocity);								//Limits speed vector
 				anchorPoint.add(extraForce);
 				

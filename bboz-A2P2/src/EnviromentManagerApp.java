@@ -31,35 +31,12 @@ public class EnviromentManagerApp extends JFrame{
 
 	private static final long serialVersionUID = 1L;
 
-	
-	//This constructor acts as an driver function for the project
-	public EnviromentManagerApp(String title) {
-		super(title);																//Calls the superclass
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);						//Exits the program when closed
-		this.setSize(1920,1080);													//Set frame resolution to 1080p (1920x1080)
-		ControlPanel controlPanel = new ControlPanel();
-		Dimension panelSize = this.getSize();										//Creates a Dimension type object to pass the screen size values
-		EnviromentPanel animPanel = new EnviromentPanel(panelSize,controlPanel);					//Panel size is subject to change
-	
-		setPreferredSize(panelSize);
-		
-		
-		
-		setLayout(new BorderLayout());
-		
-		add(animPanel);																//Panel is added
-		add(controlPanel,BorderLayout.EAST);
-		
-		
-		this.setVisible(true);														//Sets the panel visible
-		
-	}
-	
+
+
 	
 	public static void main(String[] args) {
-		new EnviromentManagerApp("Demo");				//Runs the application
-		
-		
+		//new mainFrame();
+		new mainFrame();
 		
 	}
 	

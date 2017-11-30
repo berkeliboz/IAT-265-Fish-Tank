@@ -425,6 +425,32 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 		
 	}
 	
+        public static void generateParameteredAdvancedPredatorFish(float scaleFactor, Color creatureColor,int stripeNumber, int posX,int posY, float totalEnergy,boolean isSick, int detectionRadius,int energyUsage, float maxVelocity) {
+		
+		if(predatorList.size() < PREDATOR_FISH_NUMBER) {
+			predatorList.add(new PredatorFish(scaleFactor,creatureColor,scaleFactor,posX,posY,totalEnergy,isSick,detectionRadius,energyUsage,maxVelocity));
+			creatures.add(predatorList.get(predatorList.size()-1));
+		
+		}
+		
+	}
+        
+        
+        
+        public static void generateParameteredBasicPredatorFish(float scaleFactor, Color creatureColor,int stripeNumber, int posX,int posY, float totalEnergy) {
+		
+		if(predatorList.size() < PREDATOR_FISH_NUMBER) {
+			predatorList.add(new PredatorFish(scaleFactor,creatureColor,scaleFactor,posX,posY,totalEnergy));
+			creatures.add(predatorList.get(predatorList.size()-1));
+		
+		}
+		
+	}
+	
+        
+        
+        
+        
 	public static void generateFish() {
 		
 		if(fishList.size() < FISH_NUMBER) {
@@ -483,17 +509,23 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 		
 			Fish tmp = getClosestFish(p);						//Predators swim to the closest fish
 			for(Fish f: fishList) {
-				if(p.hasDetectedFish(f) )
-					p.swimToFish(tmp);
-				if(p.collides(f)) {								//If predator touches the fish
-					f.killFish();
-					p.grow(f.getScaleFactor());					//Grow	
-					break;
-				}
+				if(p.hasDetectedFish(f) ){
+                                    p.swimToFish(tmp);   
+                                break;
+                        }
+					
+                                        
 				
 	
 			}
-			
+			for(Fish f: fishList){
+                            if(p.collides(f)) {								//If predator touches the fish
+					f.killFish();
+					p.grow(f.getScaleFactor());					//Grow	
+				}
+                        }
+                        
+                        
 			if(p.isIn) {										//If predator is inside boundaries
 				
 				if(tmp == null) {
@@ -527,7 +559,7 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 			
 			//Call frame dependent functions
 			f.useEnergy();
-			f.updateMaxSpeed();
+			//f.updateMaxSpeed();
 			f.shrinkIfHungry();
 			f.getSick();
 			f.checkBoundaries(f);

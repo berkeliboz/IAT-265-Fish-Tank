@@ -79,10 +79,10 @@ import processing.core.PVector;
 public class Creature {
 
 	//Static max values setup
-	protected float MAX_ACCELERATION = 0.1f; 
+	protected float MAX_ACCELERATION = 1f; 
 	protected float MAX_VELOCITY= 10f;
 	protected float maxVelocity = 10f;
-	
+        protected int hungerMaxValue = 800;
 	
 	protected int greyRGBValues = 190;
 	
@@ -125,7 +125,7 @@ public class Creature {
 	protected Arc2D fishUpperTail3;
 
 	protected Arc2D detectionRadiusCircle;
-	
+	protected int energyUsageOverTime = 10;
 	protected boolean hasEnergy;
 	protected int detectionRadius = 550;
 
@@ -152,6 +152,7 @@ public class Creature {
 	
 	//Default constructor for the default creature type object								[These parameters are very likely to be modified]
 	public Creature() {
+                maxVelocity = (scaleFactor/5)*30;
 		hasEnergy = true;
 		fishHeight = 70;
 		fishWidth = 175;
@@ -194,9 +195,15 @@ public class Creature {
 	
 	//Hunger level related functions
 	protected int getHunger() {return hungrySinceFrames;}
-	protected void grow() {scaleFactor *=1.1;}
-	protected void shrink() {scaleFactor *=0.9;}
-	
+	protected void grow() {
+            scaleFactor *=1.1;
+            maxVelocity = (scaleFactor/5)*30;
+        }
+        
+	protected void shrink() {
+            scaleFactor *=0.9;
+            maxVelocity = (scaleFactor/5)*30;
+        }
 	
 	public void killFish() {isAlive = false;}
 	
@@ -225,7 +232,7 @@ public class Creature {
 	//If fish is hungry enough for a while, it shrinks. If fish shrinks to half size, it gets sick
 	public void shrinkIfHungry() {
 		//hungrySinceFrames  modified to demonstrate sickness function faster
-		if(hungrySinceFrames >= 900) {
+		if(hungrySinceFrames >= hungerMaxValue) {
 			shrink();
 			hungrySinceFrames = 0;
 		}
@@ -239,11 +246,11 @@ public class Creature {
 	
 	public void useEnergy() {
 		if(totalEnergy >=5) {
-			totalEnergy-=10*scaleFactor;
+			totalEnergy-=energyUsageOverTime*scaleFactor;
 			hasEnergy = true;
 		}
 		else {
-			hungrySinceFrames+=10*scaleFactor;
+			hungrySinceFrames+=energyUsageOverTime*scaleFactor;
 			hasEnergy = false;		
 		}
 	}

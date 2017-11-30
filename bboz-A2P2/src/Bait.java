@@ -113,7 +113,7 @@ public class Bait {
 	//Height of the bait
 	private int height = 40;
 	//Scale of the bait
-	private float scale = 1F;
+	private float scale = baitSize/100;
 	//Selected is used for visual debugging
 	private boolean selected = false;
 	//baitBoundaryBox is the area of the bait object
@@ -124,7 +124,7 @@ public class Bait {
 		pos = new PVector(250,250);
 		setShapeAttributes();
 		baitSize = 250;
-		scale = baitSize/100;
+		
 	}
 
 	//Bait class Constructor 
@@ -132,7 +132,6 @@ public class Bait {
 		this.pos = pos;
 		setShapeAttributes();
 		baitSize = (int)(Math.random()*100)+100;
-		
 		scale = ((float)baitSize)/100;
 		
 	}
