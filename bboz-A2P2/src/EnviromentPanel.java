@@ -135,7 +135,15 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 	private Timer t;																//Timer decleration
 	private java.util.Timer timerIns;												//Timer decleration
 	private int manualTimer = 0;													//Manual timer using frames as a value of time
-	
+	private static int fps = 33;
+        
+       
+        public static void setFPS(int fps){EnviromentPanel.fps = fps;}
+        
+        public static void fpsUp(){fps-=10;}
+        public static void fpsDown(){fps+=10;}
+        public static int getFps(){return fps;}
+        
 	private static JPanel panelTest = new JPanel();									//Panel is created
 	
 	public static ArrayList<PredatorFish> getPredatorList() {
@@ -185,7 +193,7 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 	    	else if(tmpFish != null && !shiftDown){
 	    		
 	    		highlightedCreature = tmpFish;
-
+                       
 	    		
 	    	}
 	    	
@@ -279,6 +287,8 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 		
 		controlPanel = cp;
 		
+                
+                
 		addKeyListener(this);										//Add key listener
 		setFocusable(true);											//Set focusable
 		
@@ -314,8 +324,10 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 		});
 		
 		panelTest.setBounds(0,0 , initialSize.width-300, initialSize.height-300);	//Panel uses the same bounds with Frame [Subject to change later]
-		t = new Timer(33, this);													//Used to start timer to generate Frames
-		t.start();																	//Runs the timer
+		t = new Timer(fps, this);													//Used to start timer to generate Frames
+		
+                t.start();																	//Runs the timer
+                
 		spawnBait();														
 
 	}
@@ -340,6 +352,8 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 		setBackground(Color.cyan);													//Sets the background to Cyan color
 		Graphics2D g2 = (Graphics2D)g;
 		
+                
+                
 		for(Fish f: fishList) {
 			f.draw(g2);
 			f.setIsChoosenFalse();		
@@ -424,24 +438,14 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 		}
 		
 	}
-	
-        public static void generateParameteredAdvancedPredatorFish(float scaleFactor, Color creatureColor,int stripeNumber, int posX,int posY, float totalEnergy,boolean isSick, int detectionRadius,int energyUsage, float maxVelocity) {
-		
-		if(predatorList.size() < PREDATOR_FISH_NUMBER) {
-			predatorList.add(new PredatorFish(scaleFactor,creatureColor,scaleFactor,posX,posY,totalEnergy,isSick,detectionRadius,energyUsage,maxVelocity));
-			creatures.add(predatorList.get(predatorList.size()-1));
-		
-		}
-		
-	}
+
         
         
-        
-        public static void generateParameteredBasicPredatorFish(float scaleFactor, Color creatureColor,int stripeNumber, int posX,int posY, float totalEnergy) {
+        public static void generateParameteredFish(float scaleFactor, Color creatureColor,int stripeNumber, int posX,int posY, float totalEnergy, boolean isSick, int detectionRadius,int energyUsage, float maxVelocity) {
 		
-		if(predatorList.size() < PREDATOR_FISH_NUMBER) {
-			predatorList.add(new PredatorFish(scaleFactor,creatureColor,scaleFactor,posX,posY,totalEnergy));
-			creatures.add(predatorList.get(predatorList.size()-1));
+		if(fishList.size() < FISH_NUMBER) {
+			fishList.add(new Fish( scaleFactor,  creatureColor, stripeNumber,  posX, posY,  totalEnergy,  isSick,  detectionRadius, energyUsage,  maxVelocity));
+			creatures.add(fishList.get(fishList.size()-1));
 		
 		}
 		
@@ -480,7 +484,8 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 		creatures.removeAll(creatures);								//Empties the list to update in every frame
 		creatures.addAll(predatorList);								//Adds predators to list
 				
-
+                
+                
 		preserveFishNumber(fishList);								//Add new fishes if there are missing fishes
 		creatures.addAll(fishList);									//Adds fishes to list
 		
@@ -620,9 +625,16 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 		}
 		}
 		
+                try {
+                t.setDelay(fps);
+                
+                } catch (Exception eb) {
+                    
+                }
+                
 		
 		
-		
+                
 		manualTimer++;
 		repaint();																	//Used to repaint
 	}

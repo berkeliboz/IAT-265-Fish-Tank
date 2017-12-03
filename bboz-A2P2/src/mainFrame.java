@@ -1,6 +1,11 @@
 
+
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.Scanner;
 
 import javax.swing.JFrame;
 
@@ -30,7 +35,7 @@ public class mainFrame extends javax.swing.JFrame {
 	
 	setPreferredSize(panelSize);
 		
-                
+        
                 
 		
 		
@@ -43,11 +48,16 @@ public class mainFrame extends javax.swing.JFrame {
 		
         
         initComponents();
-                
         
+        frameTickDialog.setSize(400,200);
+        frameTextField.setFocusable(false);
+        fpsSliderDialog.setSize(235, 150);
+        fpsLabel.setText("Each Frame Rendered in " + String.valueOf(jSlider1.getValue())+ " ms");
         
     }
 
+    public void changeRes(int x,int y){this.setSize(x,y);}
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -57,26 +67,171 @@ public class mainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        frameTickDialog = new javax.swing.JDialog();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        frameTextField = new javax.swing.JTextField();
+        fpsSliderDialog = new javax.swing.JDialog();
+        jSlider1 = new javax.swing.JSlider(0,400,33);
+        fpsLabel = new javax.swing.JLabel();
+        defaultButton = new javax.swing.JButton();
+        closeButton = new javax.swing.JButton();
+        posDialog = new javax.swing.JDialog();
+        yPos = new javax.swing.JSlider();
+        xPos = new javax.swing.JSlider();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
+        exitButton = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
-        jMenuItem4 = new javax.swing.JMenuItem();
+        addFishButton = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
+        fpsMenu = new javax.swing.JMenu();
+        increaseFPSButton = new javax.swing.JMenuItem();
+        jMenuItem8 = new javax.swing.JMenuItem();
+        openFPSSlider = new javax.swing.JMenuItem();
+
+        frameTickDialog.getContentPane().setLayout(new java.awt.FlowLayout());
+
+        jLabel1.setText("Frame Delay Increased To");
+
+        jButton1.setText("OK");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        frameTextField.setText("33");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(frameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(138, 138, 138)
+                        .addComponent(jButton1)))
+                .addContainerGap(102, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(frameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addContainerGap(28, Short.MAX_VALUE))
+        );
+
+        frameTickDialog.getContentPane().add(jPanel1);
+
+        fpsSliderDialog.getContentPane().setLayout(new java.awt.FlowLayout());
+
+        int fps_min = 0;
+        int fps_max = 400;
+        jSlider1.setMajorTickSpacing(20);
+        jSlider1.setMinorTickSpacing(5);
+        jSlider1.setPaintTicks(true);
+        jSlider1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSlider1StateChanged(evt);
+            }
+        });
+        fpsSliderDialog.getContentPane().add(jSlider1);
+
+        fpsLabel.setText("FPS: ");
+        fpsSliderDialog.getContentPane().add(fpsLabel);
+
+        defaultButton.setText("Default");
+        defaultButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                defaultButtonActionPerformed(evt);
+            }
+        });
+        fpsSliderDialog.getContentPane().add(defaultButton);
+
+        closeButton.setText("Close");
+        closeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                closeButtonActionPerformed(evt);
+            }
+        });
+        fpsSliderDialog.getContentPane().add(closeButton);
+
+        xPos.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                xPosStateChanged(evt);
+            }
+        });
+
+        jLabel2.setText("X Position:");
+
+        jLabel3.setText("Y Position:");
+
+        javax.swing.GroupLayout posDialogLayout = new javax.swing.GroupLayout(posDialog.getContentPane());
+        posDialog.getContentPane().setLayout(posDialogLayout);
+        posDialogLayout.setHorizontalGroup(
+            posDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(posDialogLayout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addGroup(posDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(posDialogLayout.createSequentialGroup()
+                        .addComponent(yPos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel3))
+                    .addGroup(posDialogLayout.createSequentialGroup()
+                        .addComponent(xPos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(37, 37, 37)
+                        .addComponent(jLabel2)))
+                .addContainerGap(83, Short.MAX_VALUE))
+        );
+        posDialogLayout.setVerticalGroup(
+            posDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, posDialogLayout.createSequentialGroup()
+                .addGap(33, 33, 33)
+                .addGroup(posDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(xPos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addGap(45, 45, 45)
+                .addGroup(posDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(yPos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addContainerGap(48, Short.MAX_VALUE))
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jMenu1.setText("File");
 
-        jMenuItem2.setText("Save State");
+        jMenuItem2.setText("Save Templates");
         jMenu1.add(jMenuItem2);
 
-        jMenuItem3.setText("Load State");
+        jMenuItem3.setText("Load Templates");
         jMenu1.add(jMenuItem3);
+
+        exitButton.setText("Exit");
+        exitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitButtonActionPerformed(evt);
+            }
+        });
+        jMenu1.add(exitButton);
 
         jMenuBar1.add(jMenu1);
 
@@ -94,8 +249,13 @@ public class mainFrame extends javax.swing.JFrame {
 
         jMenu3.setText("Add");
 
-        jMenuItem4.setText("Fish Template");
-        jMenu3.add(jMenuItem4);
+        addFishButton.setText("Fish Template");
+        addFishButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addFishButtonActionPerformed(evt);
+            }
+        });
+        jMenu3.add(addFishButton);
 
         jMenuItem5.setText("Predator Template");
         jMenu3.add(jMenuItem5);
@@ -105,13 +265,46 @@ public class mainFrame extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu3);
 
+        fpsMenu.setText("Fps");
+        fpsMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fpsMenuActionPerformed(evt);
+            }
+        });
+
+        increaseFPSButton.setText("Increase FPS");
+        increaseFPSButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                increaseFPSButtonActionPerformed(evt);
+            }
+        });
+        fpsMenu.add(increaseFPSButton);
+
+        jMenuItem8.setText("Decrease FPS");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
+        fpsMenu.add(jMenuItem8);
+
+        openFPSSlider.setText("Open FPS Slider");
+        openFPSSlider.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openFPSSliderActionPerformed(evt);
+            }
+        });
+        fpsMenu.add(openFPSSlider);
+
+        jMenuBar1.add(fpsMenu);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGap(0, 538, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -126,6 +319,113 @@ public class mainFrame extends javax.swing.JFrame {
         addFishFrame addFrame = new addFishFrame();
         addFrame.setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_exitButtonActionPerformed
+
+    private void fpsMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fpsMenuActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fpsMenuActionPerformed
+
+    private void increaseFPSButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_increaseFPSButtonActionPerformed
+        // TODO add your handling code here:
+        EnviromentPanel.fpsUp();
+        frameTickDialog.setVisible(true);
+        frameTextField.setText(String.valueOf(EnviromentPanel.getFps()));
+
+    }//GEN-LAST:event_increaseFPSButtonActionPerformed
+
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        // TODO add your handling code here:
+         EnviromentPanel.fpsDown();
+         frameTickDialog.setVisible(true);
+         frameTextField.setText(String.valueOf(EnviromentPanel.getFps()));
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        frameTickDialog.setVisible(false);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void addFishButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addFishButtonActionPerformed
+        // TODO add your handling code here:
+
+        BufferedReader br = null;
+        Scanner sc = null;
+        float scale,maxVelocity;
+        int xPos,yPos,stripeNumber,startingEnergy,detectionRadius,energyUsage;
+        Color newCreatureColor;
+        boolean isSick;
+        int r,g,b;
+        try {
+            sc = new Scanner(new FileReader("config.txt"));
+            while(!"Normal_Fish".equals(sc.next())){
+                sc.next();
+            }
+            
+            sc.next();
+            scale = sc.nextFloat();
+            sc.next();
+            xPos = sc.nextInt();
+            sc.next();
+            yPos = sc.nextInt();
+            sc.next();
+            startingEnergy = sc.nextInt();
+            sc.next();
+            r= sc.nextInt();
+            sc.next();
+            g = sc.nextInt();
+            sc.next();
+            b = sc.nextInt();
+            newCreatureColor = new Color(r,g,b);
+            sc.next();
+            detectionRadius = sc.nextInt();
+            sc.next();
+            energyUsage = sc.nextInt();
+            sc.next();
+            maxVelocity = sc.nextFloat();
+            sc.next();
+            isSick = Boolean.valueOf(sc.next());
+            sc.next();
+            stripeNumber = sc.nextInt();
+            
+            EnviromentPanel.generateParameteredFish(scale, newCreatureColor, stripeNumber, xPos, yPos, startingEnergy, isSick, detectionRadius, energyUsage, maxVelocity);
+            
+        } catch (Exception e) {
+            System.err.println("Template not created");
+           
+        }
+          
+        
+    }//GEN-LAST:event_addFishButtonActionPerformed
+
+    private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider1StateChanged
+        // TODO add your handling code here:
+        fpsLabel.setText("Each Frame Rendered in " + String.valueOf(jSlider1.getValue())+ " ms");
+        EnviromentPanel.setFPS(jSlider1.getValue());
+    }//GEN-LAST:event_jSlider1StateChanged
+
+    private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
+        // TODO add your handling code here:
+        fpsSliderDialog.setVisible(false);
+    }//GEN-LAST:event_closeButtonActionPerformed
+
+    private void openFPSSliderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFPSSliderActionPerformed
+        // TODO add your handling code here:
+        fpsSliderDialog.setVisible(true);
+    }//GEN-LAST:event_openFPSSliderActionPerformed
+
+    private void defaultButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_defaultButtonActionPerformed
+        // TODO add your handling code here:
+        jSlider1.setValue(33);
+    }//GEN-LAST:event_defaultButtonActionPerformed
+
+    private void xPosStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_xPosStateChanged
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_xPosStateChanged
 
     /**
      * @param args the command line arguments
@@ -167,6 +467,20 @@ public class mainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem addFishButton;
+    private javax.swing.JButton closeButton;
+    private javax.swing.JButton defaultButton;
+    private javax.swing.JMenuItem exitButton;
+    private javax.swing.JLabel fpsLabel;
+    private javax.swing.JMenu fpsMenu;
+    private javax.swing.JDialog fpsSliderDialog;
+    private javax.swing.JTextField frameTextField;
+    private javax.swing.JDialog frameTickDialog;
+    private javax.swing.JMenuItem increaseFPSButton;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -174,8 +488,14 @@ public class mainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem8;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JSlider jSlider1;
+    private javax.swing.JMenuItem openFPSSlider;
+    private javax.swing.JDialog posDialog;
+    private javax.swing.JSlider xPos;
+    private javax.swing.JSlider yPos;
     // End of variables declaration//GEN-END:variables
 }

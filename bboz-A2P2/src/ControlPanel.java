@@ -103,6 +103,7 @@ public class ControlPanel extends JPanel{
 		Creature tmp = EnviromentPanel.getHighlightedCreature();
 		tmp.setIsChoosenTrue();
 		
+                
 		//Next two for loops are used to check if clicked fish matches on both fish lists
 		for(Fish b: EnviromentPanel.getFishList()) {
 			if(b.anchorPoint == tmp.anchorPoint)
@@ -188,13 +189,13 @@ public class ControlPanel extends JPanel{
 		
 		userInfo.add(new JLabel("                 Key Bounds"));		
 		userInfo.add(new JLabel("                 "));	
-		userInfo.add(new JLabel(" • Click on a Fish to Get Info"));
-		userInfo.add(new JLabel(" • Enter to Toggle the Control Panel"));
-		userInfo.add(new JLabel(" • Shift + D to Toggle Fish Info"));
-		userInfo.add(new JLabel(" • Shift + Space to Toggle Predator FOV "));
-		userInfo.add(new JLabel(" • Click anywhere to generate a bait "));
-		userInfo.add(new JLabel(" • Click and hold bait to increase size "));
-		userInfo.add(new JLabel(" • CTRL + Click on bait to delete"));
+		userInfo.add(new JLabel(" ï¿½ Click on a Fish to Get Info"));
+		userInfo.add(new JLabel(" ï¿½ Enter to Toggle the Control Panel"));
+		userInfo.add(new JLabel(" ï¿½ Shift + D to Toggle Fish Info"));
+		userInfo.add(new JLabel(" ï¿½ Shift + Space to Toggle Predator FOV "));
+		userInfo.add(new JLabel(" ï¿½ Click anywhere to generate a bait "));
+		userInfo.add(new JLabel(" ï¿½ Click and hold bait to increase size "));
+		userInfo.add(new JLabel(" ï¿½ CTRL + Click on bait to delete"));
 		userInfo.add(new JLabel("                 "));	
 		
 		
@@ -437,7 +438,7 @@ public class ControlPanel extends JPanel{
 		additionalInfoPanel.setBorder(new TitledBorder("Additional Info"));
 		additionalInfoPanel.add(new JLabel("                Known Bugs "));
 		additionalInfoPanel.add(new JLabel("                		 "));
-		additionalInfoPanel.add(new JLabel(" • After using Panel, Enviromental "));
+		additionalInfoPanel.add(new JLabel(" ï¿½ After using Panel, Enviromental "));
 		additionalInfoPanel.add(new JLabel(" Panel loses focus. To fix, press TAB "));
 		additionalInfoPanel.add(new JLabel(" and try clicking again "));
 		additionalInfoPanel.add(new JLabel("                		 "));

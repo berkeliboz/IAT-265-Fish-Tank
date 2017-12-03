@@ -4,7 +4,14 @@
  * and open the template in the editor.
  */
 import java.awt.Color;
+import java.awt.Dimension;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.util.Formatter;
 import java.util.Hashtable;
+import java.util.Scanner;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 /**
  *
@@ -12,21 +19,30 @@ import javax.swing.JLabel;
  */
 public class addNormalFishFrame extends javax.swing.JFrame {
 
-    float scale = 1f;
-    boolean isAdvanced = false;
-    int xPos = 500;
-    int yPos = 500;
-    int startingEnergy = 1000;
-    Color newCreatureColor = Color.CYAN;
-    int detectionRadius = 550;
-    int energyUsage = 10;
+    
+    
+    static float scale = 1f;
+    static boolean isAdvanced = false;
+    static int xPos = 500;
+    static int yPos = 500;
+    static int startingEnergy = 1000;
+    static Color newCreatureColor = Color.CYAN;
+    static int detectionRadius = 550;
+    static int energyUsage = 10;
+    static float maxVelocity = 10f;
+    static boolean isSick = false;
+    static int stripeNumber = 0;
+    
+    private static Formatter formatterX;
     
     /**
      * Creates new form addNormalFishFrame
      */
     public addNormalFishFrame() {
         initComponents();
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         jPanel2.setVisible(false);
+        confirmationDialog.setSize(320, 180);
     }
 
     /**
@@ -39,6 +55,12 @@ public class addNormalFishFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         jColorChooser1 = new javax.swing.JColorChooser();
+        confirmationDialog = new javax.swing.JDialog();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        noButton = new javax.swing.JButton();
+        yesButton = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -60,6 +82,66 @@ public class addNormalFishFrame extends javax.swing.JFrame {
         maxVelocitySlider = new javax.swing.JSlider();
         jLabel6 = new javax.swing.JLabel();
         editScale = new javax.swing.JSlider(1,200,100);
+        jPanel3 = new javax.swing.JPanel();
+        stripeNumberButton0 = new javax.swing.JRadioButton();
+        stripeNumberButton1 = new javax.swing.JRadioButton();
+        stripeNumberButton2 = new javax.swing.JRadioButton();
+        stripeNumberButton3 = new javax.swing.JRadioButton();
+        stripeNumberLabel = new javax.swing.JLabel();
+
+        confirmationDialog.getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel9.setText("Create Fish Instance from Template now ?");
+
+        noButton.setText("No");
+        noButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                noButtonActionPerformed(evt);
+            }
+        });
+
+        yesButton.setText("Yes");
+        yesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                yesButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel10.setText("Template Saved!");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(53, 53, 53)
+                        .addComponent(yesButton)
+                        .addGap(68, 68, 68)
+                        .addComponent(noButton))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(45, 45, 45)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel9))))
+                .addContainerGap(72, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(yesButton)
+                    .addComponent(noButton))
+                .addContainerGap(45, Short.MAX_VALUE))
+        );
+
+        confirmationDialog.getContentPane().add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 320, 170));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -89,6 +171,7 @@ public class addNormalFishFrame extends javax.swing.JFrame {
         jLabel4.setText("Color");
 
         colorChooserPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        colorChooserPanel.setPreviewPanel(new javax.swing.JPanel());
 
         jLabel5.setText("Starting Energy");
 
@@ -200,6 +283,69 @@ public class addNormalFishFrame extends javax.swing.JFrame {
             }
         });
 
+        jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        stripeNumberButton0.setText("No Stripes");
+        stripeNumberButton0.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                stripeNumberButton0StateChanged(evt);
+            }
+        });
+
+        stripeNumberButton1.setText("1 Stripe");
+        stripeNumberButton1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                stripeNumberButton1StateChanged(evt);
+            }
+        });
+
+        stripeNumberButton2.setText("2 Stripes");
+        stripeNumberButton2.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                stripeNumberButton2StateChanged(evt);
+            }
+        });
+
+        stripeNumberButton3.setText("3 Stripes");
+        stripeNumberButton3.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                stripeNumberButton3StateChanged(evt);
+            }
+        });
+
+        stripeNumberLabel.setText("Stripe Number");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(stripeNumberLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(stripeNumberButton3)
+                    .addComponent(stripeNumberButton2)
+                    .addComponent(stripeNumberButton1)
+                    .addComponent(stripeNumberButton0))
+                .addGap(16, 16, 16))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(stripeNumberButton0)
+                    .addComponent(stripeNumberLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(stripeNumberButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(stripeNumberButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(stripeNumberButton3)
+                .addContainerGap(23, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -207,32 +353,36 @@ public class addNormalFishFrame extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel4))
-                .addGap(33, 33, 33)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(colorChooserPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(xPosSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(yPosSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(47, 47, 47)
-                        .addComponent(jLabel5)
-                        .addGap(18, 18, 18)
-                        .addComponent(startEnergySlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(editScale, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jToggleButton2)
-                .addGap(18, 18, 18)
-                .addComponent(nextButton)
-                .addGap(19, 19, 19))
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel4))
+                        .addGap(55, 55, 55)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(xPosSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(yPosSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(47, 47, 47)
+                                .addComponent(jLabel5)
+                                .addGap(18, 18, 18)
+                                .addComponent(startEnergySlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(editScale, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(colorChooserPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jToggleButton2)
+                                .addGap(18, 18, 18)
+                                .addComponent(nextButton))
+                            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(19, 19, 19))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -247,24 +397,28 @@ public class addNormalFishFrame extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(jLabel5)
                     .addComponent(startEnergySlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(9, 9, 9)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(yPosSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(16, 16, 16)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(colorChooserPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(8, 8, 8)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(9, 9, 9)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(yPosSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(21, 21, 21)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(colorChooserPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(134, 134, 134)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(nextButton)
-                    .addComponent(jToggleButton2))
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(nextButton)
+                            .addComponent(jToggleButton2))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -329,7 +483,8 @@ public class addNormalFishFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         newCreatureColor = colorChooserPanel.getColor();
         
-        
+        confirmationDialog.setVisible(true);
+        writeToFile();
     }//GEN-LAST:event_nextButtonActionPerformed
 
     private void detectionRadiusFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_detectionRadiusFieldActionPerformed
@@ -348,49 +503,177 @@ public class addNormalFishFrame extends javax.swing.JFrame {
         energyUsage =  Integer.parseInt(energyUsageField.getText());
     }//GEN-LAST:event_energyUsageFieldFocusLost
 
+    private void stripeNumberButton0StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_stripeNumberButton0StateChanged
+        // TODO add your handling code here:
+        stripeNumberButton1.setSelected(false);
+        stripeNumberButton2.setSelected(false);
+        stripeNumberButton3.setSelected(false);
+        stripeNumber = 0;
+        
+    }//GEN-LAST:event_stripeNumberButton0StateChanged
+
+    private void stripeNumberButton1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_stripeNumberButton1StateChanged
+        // TODO add your handling code here:
+        stripeNumberButton0.setSelected(false);
+        stripeNumberButton2.setSelected(false);
+        stripeNumberButton3.setSelected(false);
+        stripeNumber = 1;
+        
+
+    }//GEN-LAST:event_stripeNumberButton1StateChanged
+
+    private static void readFromFile(){
+        BufferedReader br = null;
+        Scanner sc = null;
+        int r,g,b;
+        try {
+            sc = new Scanner(new FileReader("config.txt"));
+          
+       
+            while(!"Normal_Fish".equals(sc.next())){
+                sc.next();
+            }
+            sc.next();
+            scale = sc.nextFloat();
+            sc.next();
+            xPos = sc.nextInt();
+            sc.next();
+            yPos = sc.nextInt();
+            sc.next();
+            startingEnergy = sc.nextInt();
+            sc.next();
+            r= sc.nextInt();
+            sc.next();
+            g = sc.nextInt();
+            sc.next();
+            b = sc.nextInt();
+            newCreatureColor = new Color(r,g,b);
+            sc.next();
+            detectionRadius = sc.nextInt();
+            sc.next();
+            energyUsage = sc.nextInt();
+            sc.next();
+            maxVelocity = sc.nextInt();
+            sc.next();
+            isSick = sc.nextBoolean();
+            sc.next();
+            stripeNumber = sc.nextInt();
+        
+        } catch (Exception e) {
+            
+        }
+        
+    }
+    
+    public static void writeToFile(){
+        try {
+            formatterX = new Formatter("config.txt");
+            
+            formatterX.format("%s", "Normal_Fish \n");
+            formatterX.format("%s", "Normal_Fish_Scale ");
+            formatterX.format("%s\n", scale);
+            formatterX.format("%s", "Normal_Fish_xPos ");
+            formatterX.format("%s\n", xPos);
+            formatterX.format("%s", "Normal_Fish_yPos ");
+            formatterX.format("%s\n", yPos);
+            formatterX.format("%s", "Normal_Fish_startingEnergy ");
+            formatterX.format("%s\n", startingEnergy);
+            formatterX.format("%s", "Normal_Fish_newCreatureColor_R ");
+            formatterX.format("%s\n", newCreatureColor.getRed());
+            formatterX.format("%s", "Normal_Fish_newCreatureColor_G ");
+            formatterX.format("%s\n", newCreatureColor.getGreen());
+            formatterX.format("%s", "Normal_Fish_newCreatureColor_B ");
+            formatterX.format("%s\n", newCreatureColor.getBlue());
+            formatterX.format("%s", "Normal_Fish_detectionRadius ");
+            formatterX.format("%s\n", detectionRadius);
+            formatterX.format("%s", "Normal_Fish_energyUsage ");
+            formatterX.format("%s\n", energyUsage);
+            formatterX.format("%s", "Normal_Fish_maxVelocity ");
+            formatterX.format("%s\n", maxVelocity);
+            formatterX.format("%s", "Normal_Fish_isSick ");
+            formatterX.format("%s\n", isSick);
+            formatterX.format("%s", "Normal_Fish_stripeNumber ");
+            formatterX.format("%s\n", stripeNumber);
+            
+            formatterX.close();
+            
+        
+            readFromFile();
+        
+        } catch (Exception e) {
+            
+        }
+        
+        
+        
+    }
+    
+    /*
+    
+    float scale = 1f;
+    boolean isAdvanced = false;
+    int xPos = 500;
+    int yPos = 500;
+    int startingEnergy = 1000;
+    Color newCreatureColor = Color.CYAN;
+    int detectionRadius = 550;
+    int energyUsage = 10;
+    float maxVelocity = 10f;
+    boolean isSick = false;
+    int stripeNumber = 0;
+    
+    
+    
+    */
+    
+    
+    private void stripeNumberButton2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_stripeNumberButton2StateChanged
+        // TODO add your handling code here:
+        stripeNumberButton1.setSelected(false);
+        stripeNumberButton0.setSelected(false);
+        stripeNumberButton3.setSelected(false);
+        stripeNumber = 2;
+        
+
+    }//GEN-LAST:event_stripeNumberButton2StateChanged
+
+    private void stripeNumberButton3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_stripeNumberButton3StateChanged
+        // TODO add your handling code here:
+        stripeNumberButton1.setSelected(false);
+        stripeNumberButton2.setSelected(false);
+        stripeNumberButton0.setSelected(false);
+        stripeNumber = 3;
+        
+
+    }//GEN-LAST:event_stripeNumberButton3StateChanged
+
+    private void yesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yesButtonActionPerformed
+        // TODO add your handling code here:
+        confirmationDialog.setVisible(false);
+        this.setVisible(false);
+        EnviromentPanel.generateParameteredFish(scale, newCreatureColor, stripeNumber, xPos, yPos, startingEnergy, isSick, detectionRadius, energyUsage, maxVelocity);
+    }//GEN-LAST:event_yesButtonActionPerformed
+
+    private void noButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noButtonActionPerformed
+        this.setVisible(false);
+        confirmationDialog.setVisible(false);        
+    }//GEN-LAST:event_noButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(addNormalFishFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(addNormalFishFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(addNormalFishFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(addNormalFishFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new addNormalFishFrame().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JColorChooser colorChooserPanel;
+    private javax.swing.JDialog confirmationDialog;
     private javax.swing.JTextField detectionRadiusField;
     private javax.swing.JSlider editScale;
     private javax.swing.JTextField energyUsageField;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JColorChooser jColorChooser1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -398,13 +681,23 @@ public class addNormalFishFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JToggleButton jToggleButton2;
     private javax.swing.JSlider maxVelocitySlider;
     private javax.swing.JButton nextButton;
+    private javax.swing.JButton noButton;
     private javax.swing.JSlider startEnergySlider;
+    private javax.swing.JRadioButton stripeNumberButton0;
+    private javax.swing.JRadioButton stripeNumberButton1;
+    private javax.swing.JRadioButton stripeNumberButton2;
+    private javax.swing.JRadioButton stripeNumberButton3;
+    private javax.swing.JLabel stripeNumberLabel;
     private javax.swing.JSlider xPosSlider;
     private javax.swing.JSlider yPosSlider;
+    private javax.swing.JButton yesButton;
     // End of variables declaration//GEN-END:variables
 }

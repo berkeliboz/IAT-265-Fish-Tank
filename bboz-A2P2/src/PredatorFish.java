@@ -73,6 +73,10 @@ public class PredatorFish extends Creature{
 		FOV = new Area(detectionRadiusCircle);
 		
 	}
+
+    PredatorFish(float scaleFactor, Color creatureColor, float scaleFactor0, int posX, int posY, float totalEnergy, boolean sick, int detectionRadius, int energyUsage, float maxVelocity) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 	
 	//Getters/Setters
 	public ArrayList<Fish> getTargetList(){return detectedFishList;}
@@ -127,11 +131,17 @@ public class PredatorFish extends Creature{
 	
 	//Returns true if the detection radius of Predator intersects Fish
 	public boolean hasDetectedFish(Fish f) {
-		if(getFOVBoundary().intersects(f.getBoundary().getBounds2D())&&
+            try {
+            if(getFOVBoundary().intersects(f.getBoundary().getBounds2D())&&
 				f.getBoundary().intersects(getFOVBoundary().getBounds2D()))
 			return true;
 		return false;
-	}
+	    
+            } catch (Exception e) {
+                return false;
+            }
+            
+        }
 	
 	
 	

@@ -17,7 +17,7 @@ public class UpperPanel extends javax.swing.JFrame {
      * Creates new form UpperPanel
      */
     public UpperPanel() {
-        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         initComponents();
         
     }

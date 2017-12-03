@@ -192,7 +192,9 @@ public class Creature {
 	public void setExtraForce(PVector extraForce) {this.extraForce = extraForce;}
 	public void setHungrySinceFrames(int hungrySinceFrames) {this.hungrySinceFrames = hungrySinceFrames;}
 	public void setAnchorPoint(PVector anchorPoint) {this.anchorPoint = anchorPoint;}
-	
+	public void setXPos(int x){anchorPoint.x = x;}
+        public void setYPos(int y){anchorPoint.y = y;}
+        
 	//Hunger level related functions
 	protected int getHunger() {return hungrySinceFrames;}
 	protected void grow() {
@@ -205,8 +207,11 @@ public class Creature {
             maxVelocity = (scaleFactor/5)*30;
         }
 	
+       
+        
 	public void killFish() {isAlive = false;}
 	
+        
 	public void getSick() {
 		
 	
