@@ -1,0 +1,13 @@
+Normal_Fish 
+Normal_Fish_Scale 1.18
+Normal_Fish_xPos 682
+Normal_Fish_yPos 500
+Normal_Fish_startingEnergy 1151
+Normal_Fish_newCreatureColor_R 153
+Normal_Fish_newCreatureColor_G 255
+Normal_Fish_newCreatureColor_B 51
+Normal_Fish_detectionRadius 15000
+Normal_Fish_energyUsage 1
+Normal_Fish_maxVelocity 10.0
+Normal_Fish_isSick false
+Normal_Fish_stripeNumber 0

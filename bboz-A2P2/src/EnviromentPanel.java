@@ -128,6 +128,7 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 	private static ArrayList<Creature> creatures = new ArrayList<Creature>();
 	private boolean globalDrawInfo = false;											//Holds a copy of current objects on the screen
 	
+        private static int addBaitSpeed = 50;
 	private static ArrayList<PredatorFish> predatorList = new ArrayList<PredatorFish>();//Array list initialized for PredatorFish objects				
 	private static ArrayList<Bait> baitList = new ArrayList<Bait>();				//Array list initialized for bait objects
 	private static ArrayList<Fish> fishList = new ArrayList<Fish>();				//Array list initialized for fish objects
@@ -205,6 +206,8 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 	    }
 	}
 	
+        public static void setBaitGenerationRate(int rate){addBaitSpeed = rate;}
+        public static int getBaitGenerationRate(){return addBaitSpeed;}
 	
 	//This function checks if the clicked box is empty of not
 	public Bait checkIfOccupied(MouseEvent e) {
@@ -342,7 +345,14 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 		baitList.add(newBait);
 	}
 	
-	
+	public static void generateParameteredBait(int baitSize,Color color1,Color color2, float floatingRange){
+                if(maxBaitNumber > baitList.size()){
+                    Bait newBait = new Bait(baitSize, color1, color2, floatingRange);
+                    baitList.add(newBait);
+                }
+            
+                
+        }
 	
 	
 	//Paint Component is overridden to draw objects into panel
@@ -606,7 +616,7 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 		
 
 		
-		if(manualTimer %50 == 0 && baitList.size() < maxBaitNumber) {				//Spawn a bait every 100 frame
+		if(manualTimer %addBaitSpeed == 0 && baitList.size() < maxBaitNumber) {				//Spawn a bait every 100 frame
 			spawnBait();
 		}
 		if(manualTimer >= 30000) manualTimer = 0;									//Resets counter to avoid overflow

@@ -47,7 +47,7 @@ public class PredatorFish extends Creature{
 	private Image fishHeadHappyImage;			
 	private Image fishHeadSadImage;
 
-	private boolean detectionRadiusDrawn = false;								//Visual Debugger
+	private boolean detectionRadiusDrawn = true;								//Visual Debugger
 	
 	private ArrayList<Fish> detectedFishList = new ArrayList();
 	

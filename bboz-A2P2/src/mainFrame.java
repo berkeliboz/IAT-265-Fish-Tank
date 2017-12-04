@@ -1,5 +1,6 @@
 
 
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -52,8 +53,9 @@ public class mainFrame extends javax.swing.JFrame {
         frameTickDialog.setSize(400,200);
         frameTextField.setFocusable(false);
         fpsSliderDialog.setSize(235, 150);
-        fpsLabel.setText("Each Frame Rendered in " + String.valueOf(jSlider1.getValue())+ " ms");
-        
+        fpsLabel.setText("Each Frame Rendered in " + String.valueOf(fpsSlider.getValue())+ " ms");
+        baitGenerationRateController.setSize(285, 150);
+        baitGenerationLabel.setText("Generates Bait once in 50 frames");
     }
 
     public void changeRes(int x,int y){this.setSize(x,y);}
@@ -73,30 +75,29 @@ public class mainFrame extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         frameTextField = new javax.swing.JTextField();
         fpsSliderDialog = new javax.swing.JDialog();
-        jSlider1 = new javax.swing.JSlider(0,400,33);
+        fpsSlider = new javax.swing.JSlider(0,400,33);
         fpsLabel = new javax.swing.JLabel();
         defaultButton = new javax.swing.JButton();
         closeButton = new javax.swing.JButton();
-        posDialog = new javax.swing.JDialog();
-        yPos = new javax.swing.JSlider();
-        xPos = new javax.swing.JSlider();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        baitGenerationRateController = new javax.swing.JDialog();
+        baitGenerationSlider = new javax.swing.JSlider(1,500,50);
+        baitGenerationLabel = new javax.swing.JLabel();
+        DefaultButtonBaitGenerator = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
         exitButton = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
-        addFishButton = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
-        jMenuItem6 = new javax.swing.JMenuItem();
         fpsMenu = new javax.swing.JMenu();
         increaseFPSButton = new javax.swing.JMenuItem();
         jMenuItem8 = new javax.swing.JMenuItem();
         openFPSSlider = new javax.swing.JMenuItem();
+        baitGeneratorButton = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        addFishButton = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        addBaitButton = new javax.swing.JMenuItem();
 
         frameTickDialog.getContentPane().setLayout(new java.awt.FlowLayout());
 
@@ -145,15 +146,15 @@ public class mainFrame extends javax.swing.JFrame {
 
         int fps_min = 0;
         int fps_max = 400;
-        jSlider1.setMajorTickSpacing(20);
-        jSlider1.setMinorTickSpacing(5);
-        jSlider1.setPaintTicks(true);
-        jSlider1.addChangeListener(new javax.swing.event.ChangeListener() {
+        fpsSlider.setMajorTickSpacing(20);
+        fpsSlider.setMinorTickSpacing(5);
+        fpsSlider.setPaintTicks(true);
+        fpsSlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jSlider1StateChanged(evt);
+                fpsSliderStateChanged(evt);
             }
         });
-        fpsSliderDialog.getContentPane().add(jSlider1);
+        fpsSliderDialog.getContentPane().add(fpsSlider);
 
         fpsLabel.setText("FPS: ");
         fpsSliderDialog.getContentPane().add(fpsLabel);
@@ -174,57 +175,70 @@ public class mainFrame extends javax.swing.JFrame {
         });
         fpsSliderDialog.getContentPane().add(closeButton);
 
-        xPos.addChangeListener(new javax.swing.event.ChangeListener() {
+        baitGenerationSlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                xPosStateChanged(evt);
+                baitGenerationSliderStateChanged(evt);
             }
         });
 
-        jLabel2.setText("X Position:");
+        baitGenerationLabel.setText("Generates Bait");
 
-        jLabel3.setText("Y Position:");
+        DefaultButtonBaitGenerator.setText("Default");
+        DefaultButtonBaitGenerator.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DefaultButtonBaitGeneratorActionPerformed(evt);
+            }
+        });
 
-        javax.swing.GroupLayout posDialogLayout = new javax.swing.GroupLayout(posDialog.getContentPane());
-        posDialog.getContentPane().setLayout(posDialogLayout);
-        posDialogLayout.setHorizontalGroup(
-            posDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(posDialogLayout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addGroup(posDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(posDialogLayout.createSequentialGroup()
-                        .addComponent(yPos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel3))
-                    .addGroup(posDialogLayout.createSequentialGroup()
-                        .addComponent(xPos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(37, 37, 37)
-                        .addComponent(jLabel2)))
-                .addContainerGap(83, Short.MAX_VALUE))
+        jButton3.setText("Close");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout baitGenerationRateControllerLayout = new javax.swing.GroupLayout(baitGenerationRateController.getContentPane());
+        baitGenerationRateController.getContentPane().setLayout(baitGenerationRateControllerLayout);
+        baitGenerationRateControllerLayout.setHorizontalGroup(
+            baitGenerationRateControllerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(baitGenerationRateControllerLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(baitGenerationRateControllerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(baitGenerationRateControllerLayout.createSequentialGroup()
+                        .addComponent(baitGenerationSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(baitGenerationRateControllerLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(baitGenerationRateControllerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(baitGenerationRateControllerLayout.createSequentialGroup()
+                                .addComponent(baitGenerationLabel)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(baitGenerationRateControllerLayout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(DefaultButtonBaitGenerator)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 173, Short.MAX_VALUE)
+                                .addComponent(jButton3)
+                                .addGap(71, 71, 71))))))
         );
-        posDialogLayout.setVerticalGroup(
-            posDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, posDialogLayout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addGroup(posDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(xPos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addGap(45, 45, 45)
-                .addGroup(posDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(yPos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addContainerGap(48, Short.MAX_VALUE))
+        baitGenerationRateControllerLayout.setVerticalGroup(
+            baitGenerationRateControllerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(baitGenerationRateControllerLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(baitGenerationSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(baitGenerationLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(baitGenerationRateControllerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(DefaultButtonBaitGenerator)
+                    .addComponent(jButton3))
+                .addContainerGap(204, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jMenu1.setText("File");
 
-        jMenuItem2.setText("Save Templates");
-        jMenu1.add(jMenuItem2);
-
-        jMenuItem3.setText("Load Templates");
-        jMenu1.add(jMenuItem3);
-
+        exitButton.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0));
         exitButton.setText("Exit");
         exitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -237,6 +251,7 @@ public class mainFrame extends javax.swing.JFrame {
 
         jMenu2.setText("Edit");
 
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem1.setText("New Template");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -247,31 +262,14 @@ public class mainFrame extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu2);
 
-        jMenu3.setText("Add");
-
-        addFishButton.setText("Fish Template");
-        addFishButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addFishButtonActionPerformed(evt);
-            }
-        });
-        jMenu3.add(addFishButton);
-
-        jMenuItem5.setText("Predator Template");
-        jMenu3.add(jMenuItem5);
-
-        jMenuItem6.setText("Bait Template");
-        jMenu3.add(jMenuItem6);
-
-        jMenuBar1.add(jMenu3);
-
-        fpsMenu.setText("Fps");
+        fpsMenu.setText("General");
         fpsMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fpsMenuActionPerformed(evt);
             }
         });
 
+        increaseFPSButton.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ADD, java.awt.event.InputEvent.CTRL_MASK));
         increaseFPSButton.setText("Increase FPS");
         increaseFPSButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -280,6 +278,7 @@ public class mainFrame extends javax.swing.JFrame {
         });
         fpsMenu.add(increaseFPSButton);
 
+        jMenuItem8.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_SUBTRACT, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem8.setText("Decrease FPS");
         jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -288,7 +287,8 @@ public class mainFrame extends javax.swing.JFrame {
         });
         fpsMenu.add(jMenuItem8);
 
-        openFPSSlider.setText("Open FPS Slider");
+        openFPSSlider.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
+        openFPSSlider.setText("FPS Controller");
         openFPSSlider.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 openFPSSliderActionPerformed(evt);
@@ -296,7 +296,42 @@ public class mainFrame extends javax.swing.JFrame {
         });
         fpsMenu.add(openFPSSlider);
 
+        baitGeneratorButton.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
+        baitGeneratorButton.setText("Bait Generation Controller");
+        baitGeneratorButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                baitGeneratorButtonActionPerformed(evt);
+            }
+        });
+        fpsMenu.add(baitGeneratorButton);
+
         jMenuBar1.add(fpsMenu);
+
+        jMenu3.setText("Add");
+
+        addFishButton.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.ALT_MASK));
+        addFishButton.setText("Fish Template");
+        addFishButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addFishButtonActionPerformed(evt);
+            }
+        });
+        jMenu3.add(addFishButton);
+
+        jMenuItem5.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.ALT_MASK));
+        jMenuItem5.setText("Predator Template");
+        jMenu3.add(jMenuItem5);
+
+        addBaitButton.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.ALT_MASK));
+        addBaitButton.setText("Bait Template");
+        addBaitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addBaitButtonActionPerformed(evt);
+            }
+        });
+        jMenu3.add(addBaitButton);
+
+        jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
 
@@ -308,7 +343,7 @@ public class mainFrame extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 279, Short.MAX_VALUE)
+            .addGap(0, 281, Short.MAX_VALUE)
         );
 
         pack();
@@ -316,14 +351,9 @@ public class mainFrame extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
-        addFishFrame addFrame = new addFishFrame();
+        CreateTemplateFrame addFrame = new CreateTemplateFrame();
         addFrame.setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
-
-    private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
-        // TODO add your handling code here:
-        System.exit(0);
-    }//GEN-LAST:event_exitButtonActionPerformed
 
     private void fpsMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fpsMenuActionPerformed
         // TODO add your handling code here:
@@ -360,7 +390,7 @@ public class mainFrame extends javax.swing.JFrame {
         boolean isSick;
         int r,g,b;
         try {
-            sc = new Scanner(new FileReader("config.txt"));
+            sc = new Scanner(new FileReader("normalFishconfig.txt"));
             while(!"Normal_Fish".equals(sc.next())){
                 sc.next();
             }
@@ -401,11 +431,11 @@ public class mainFrame extends javax.swing.JFrame {
         
     }//GEN-LAST:event_addFishButtonActionPerformed
 
-    private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider1StateChanged
+    private void fpsSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fpsSliderStateChanged
         // TODO add your handling code here:
-        fpsLabel.setText("Each Frame Rendered in " + String.valueOf(jSlider1.getValue())+ " ms");
-        EnviromentPanel.setFPS(jSlider1.getValue());
-    }//GEN-LAST:event_jSlider1StateChanged
+        fpsLabel.setText("Each Frame Rendered in " + String.valueOf(fpsSlider.getValue())+ " ms");
+        EnviromentPanel.setFPS(fpsSlider.getValue());
+    }//GEN-LAST:event_fpsSliderStateChanged
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
         // TODO add your handling code here:
@@ -419,13 +449,81 @@ public class mainFrame extends javax.swing.JFrame {
 
     private void defaultButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_defaultButtonActionPerformed
         // TODO add your handling code here:
-        jSlider1.setValue(33);
+        fpsSlider.setValue(33);
+        EnviromentPanel.setFPS(fpsSlider.getValue());
     }//GEN-LAST:event_defaultButtonActionPerformed
 
-    private void xPosStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_xPosStateChanged
+    private void addBaitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBaitButtonActionPerformed
         // TODO add your handling code here:
-        
-    }//GEN-LAST:event_xPosStateChanged
+        BufferedReader br = null;
+        Scanner sc = null;
+        int r1,g1,b1,r2,g2,b2;
+        int size;
+        float floatingRange;
+        Color color1,color2;
+        try {
+            sc = new Scanner(new FileReader("baitConfig.txt"));
+          
+       
+            while(!"Bait".equals(sc.next())){
+                sc.next();
+            }
+            sc.next();
+            size = sc.nextInt();
+            sc.next();
+            floatingRange = sc.nextFloat();
+            sc.next();
+            r1 = sc.nextInt();
+            sc.next();
+            g1 = sc.nextInt();
+            sc.next();
+            b1 = sc.nextInt();
+            sc.next();
+            r2 = sc.nextInt();
+            sc.next();
+            g2 = sc.nextInt();
+            sc.next();
+            b2 = sc.nextInt();
+            color1 = new Color(r1,g1,b1);
+            color2 = new Color(r2,g2,b2);
+            
+            EnviromentPanel.generateParameteredBait(size, color1, color2, floatingRange);
+           
+        } catch (Exception e) {
+            System.out.print("err");
+        }
+
+    }//GEN-LAST:event_addBaitButtonActionPerformed
+
+    private void baitGeneratorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_baitGeneratorButtonActionPerformed
+        // TODO add your handling code here:
+        baitGenerationRateController.setVisible(true);
+
+    }//GEN-LAST:event_baitGeneratorButtonActionPerformed
+
+    private void baitGenerationSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_baitGenerationSliderStateChanged
+        // TODO add your handling code here:
+        EnviromentPanel.setBaitGenerationRate(baitGenerationSlider.getValue());
+        baitGenerationLabel.setText("Generates Bait once in " + EnviromentPanel.getBaitGenerationRate() +  " frames");
+         
+    }//GEN-LAST:event_baitGenerationSliderStateChanged
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        baitGenerationRateController.setVisible(false);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void DefaultButtonBaitGeneratorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DefaultButtonBaitGeneratorActionPerformed
+        // TODO add your handling code here:
+        EnviromentPanel.setBaitGenerationRate(50);
+        baitGenerationLabel.setText("Generates Bait once in " + EnviromentPanel.getBaitGenerationRate() +  " frames");
+        baitGenerationSlider.setValue(50);
+    }//GEN-LAST:event_DefaultButtonBaitGeneratorActionPerformed
+
+    private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_exitButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -467,35 +565,34 @@ public class mainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton DefaultButtonBaitGenerator;
+    private javax.swing.JMenuItem addBaitButton;
     private javax.swing.JMenuItem addFishButton;
+    private javax.swing.JLabel baitGenerationLabel;
+    private javax.swing.JDialog baitGenerationRateController;
+    private javax.swing.JSlider baitGenerationSlider;
+    private javax.swing.JMenuItem baitGeneratorButton;
     private javax.swing.JButton closeButton;
     private javax.swing.JButton defaultButton;
     private javax.swing.JMenuItem exitButton;
     private javax.swing.JLabel fpsLabel;
     private javax.swing.JMenu fpsMenu;
+    private javax.swing.JSlider fpsSlider;
     private javax.swing.JDialog fpsSliderDialog;
     private javax.swing.JTextField frameTextField;
     private javax.swing.JDialog frameTickDialog;
     private javax.swing.JMenuItem increaseFPSButton;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JSlider jSlider1;
     private javax.swing.JMenuItem openFPSSlider;
-    private javax.swing.JDialog posDialog;
-    private javax.swing.JSlider xPos;
-    private javax.swing.JSlider yPos;
     // End of variables declaration//GEN-END:variables
 }

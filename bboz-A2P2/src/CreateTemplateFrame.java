@@ -11,12 +11,12 @@ import javax.swing.JFrame;
  *
  * @author berke
  */
-public class addFishFrame extends javax.swing.JFrame {
+public class CreateTemplateFrame extends javax.swing.JFrame {
 
     /**
      * Creates new form addFishFrame
      */
-    public addFishFrame() {
+    public CreateTemplateFrame() {
         initComponents();
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
@@ -174,7 +174,7 @@ public class addFishFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         String objType = mainFrame.getChoosenString();
         if(objType == "Fish"){
-            addNormalFishFrame fishFrame = new addNormalFishFrame();
+            AddNormalFishFrame fishFrame = new AddNormalFishFrame();
             fishFrame.setVisible(true);
             this.setVisible(false);
         }
@@ -183,6 +183,8 @@ public class addFishFrame extends javax.swing.JFrame {
         }
         else if(objType == "Bait"){
             this.setVisible(false);
+            AddBaitFrame baitFrame = new AddBaitFrame();
+            baitFrame.setVisible(true);
         }
         else{
             this.setVisible(true);
@@ -208,20 +210,21 @@ public class addFishFrame extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(addFishFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CreateTemplateFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(addFishFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CreateTemplateFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(addFishFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CreateTemplateFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(addFishFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CreateTemplateFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new addFishFrame().setVisible(true);
+                new CreateTemplateFrame().setVisible(true);
             }
         });
     }

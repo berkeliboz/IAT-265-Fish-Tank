@@ -98,7 +98,7 @@ public class Bait {
 	//sinValueRadians is a value to increase Sinus value that is used to give floating effect on the Bait object
 	private double sinValueRadians;
 	//floatingRange is used to control Sinus curve range
-	private float floatingRange = 5;
+	private float floatingRange = 25;
 	
 	//outerPoly is used to draw outer triangle
 	private Polygon outerPoly;
@@ -119,6 +119,8 @@ public class Bait {
 	//baitBoundaryBox is the area of the bait object
 	private Area baitBoundaryBox;
 	
+        private Color color1  = Color.RED,color2 = Color.YELLOW;
+        
 	//Default Constructor 
 	public Bait() {
 		pos = new PVector(250,250);
@@ -136,7 +138,18 @@ public class Bait {
 		
 	}
 	
-	
+	public Bait(int baitSize,Color color1,Color color2, float floatingRange){
+        
+            
+            this.pos = CustomRandomizers.getRandomVectorOnPanel();
+            this.color1 = color1;
+            this.color2 = color2;
+            this.floatingRange = floatingRange;
+            this.baitSize = baitSize;
+            scale = ((float)baitSize)/100;
+            
+            setShapeAttributes();
+        }
 	
 	
 	
@@ -236,11 +249,11 @@ public class Bait {
 		//Debug this to highlight the bait
 //		highlightBait(g);
 		g.setStroke(new BasicStroke(1));
-		g.setColor(Color.red);
+		g.setColor(color1);
 
 		g.fill(outerPoly);
 		//Triangle 2 Points													//Draws inner triangle
-		g.setColor(Color.yellow);
+		g.setColor(color2);
 		g.rotate(Math.PI);
 	
 		g.fill(innerPoly);
