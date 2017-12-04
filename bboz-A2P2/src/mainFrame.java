@@ -487,6 +487,9 @@ public class mainFrame extends javax.swing.JFrame {
             sc.next();
             stripeNumber = sc.nextInt();
             
+            xPos = (int)CustomRandomizers.getRandomVectorOnPanel().x;
+            yPos = (int)CustomRandomizers.getRandomVectorOnPanel().y;
+            
             EnviromentPanel.generateParameteredFish(scale, newCreatureColor, stripeNumber, xPos, yPos, startingEnergy, isSick, detectionRadius, energyUsage, maxVelocity);
             
         } catch (Exception e) {
