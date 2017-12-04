@@ -61,8 +61,6 @@ public class AddBaitFrame extends javax.swing.JFrame {
         baitColorChooser2 = new javax.swing.JColorChooser();
         jLabel1 = new javax.swing.JLabel();
 
-        confirmationDialog.getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
         jLabel9.setText("Create Fish Instance from Template now ?");
 
         noButton.setText("No");
@@ -113,7 +111,16 @@ public class AddBaitFrame extends javax.swing.JFrame {
                 .addContainerGap(45, Short.MAX_VALUE))
         );
 
-        confirmationDialog.getContentPane().add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 320, 170));
+        javax.swing.GroupLayout confirmationDialogLayout = new javax.swing.GroupLayout(confirmationDialog.getContentPane());
+        confirmationDialog.getContentPane().setLayout(confirmationDialogLayout);
+        confirmationDialogLayout.setHorizontalGroup(
+            confirmationDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        confirmationDialogLayout.setVerticalGroup(
+            confirmationDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 

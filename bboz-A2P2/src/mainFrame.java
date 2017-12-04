@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.Formatter;
 import java.util.Scanner;
 
 import javax.swing.JFrame;
@@ -19,6 +20,10 @@ public class mainFrame extends javax.swing.JFrame {
      */
     
     private static String choosenClassName = "_";
+    
+    private static int savedScale,savedDetectionRadius,savedTotalEnergy;
+    private static Color savedColor;
+    
     
     public static void setChoosenString( String newStr){
         choosenClassName = newStr;
@@ -39,7 +44,7 @@ public class mainFrame extends javax.swing.JFrame {
 		
         
                 
-		
+	
 		
 	setLayout(new BorderLayout());
 		
@@ -58,8 +63,15 @@ public class mainFrame extends javax.swing.JFrame {
         baitGenerationRateController.setSize(285, 150);
         baitGenerationLabel.setText("Generates Bait once in 50 frames");
         clearDataDialog.setSize(235, 150);
-    
-    
+        propertiesDialog.setSize(1015, 433);
+        customScaleSliderLabel.setText(String.valueOf(customScaleSlider.getValue()/10));
+        customDetectionSlider.setMaximum(10);
+        customDetectionSlider.setMaximum(1500);
+        customDetectionSlider.setValue(EnviromentPanel.getHighlightedCreature().detectionRadius);
+        customEnergySlider.setMaximum(0);
+        customEnergySlider.setMaximum(10000);
+        customEnergySlider.setValue((int)EnviromentPanel.getHighlightedCreature().totalEnergy);
+        
     }
 
     public void changeRes(int x,int y){this.setSize(x,y);}
@@ -92,12 +104,28 @@ public class mainFrame extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         deleteDataNoButton = new javax.swing.JButton();
         deleteDataYesButton = new javax.swing.JButton();
+        propertiesDialog = new javax.swing.JDialog();
+        customScaleSlider = new javax.swing.JSlider(0,20,10);
+        jLabel3 = new javax.swing.JLabel();
+        customScaleSliderLabel = new javax.swing.JLabel();
+        customDetectionSlider = new javax.swing.JSlider();
+        jLabel9 = new javax.swing.JLabel();
+        customDetectionSliderLabel = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        customEnergySlider = new javax.swing.JSlider();
+        customEnergySliderLabel = new javax.swing.JLabel();
+        customColorPicker = new javax.swing.JColorChooser();
+        jButton2 = new javax.swing.JButton();
+        customSaveButton = new javax.swing.JButton();
+        customLoadButton = new javax.swing.JButton();
+        customColorPickerButton = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         clearDataButton = new javax.swing.JMenuItem();
         exitButton = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        propertiesButton = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
         fpsMenu = new javax.swing.JMenu();
         increaseFPSButton = new javax.swing.JMenuItem();
         jMenuItem8 = new javax.swing.JMenuItem();
@@ -287,6 +315,134 @@ public class mainFrame extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        customScaleSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                customScaleSliderStateChanged(evt);
+            }
+        });
+
+        jLabel3.setText("Scale");
+
+        customScaleSliderLabel.setText("Val");
+
+        customDetectionSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                customDetectionSliderStateChanged(evt);
+            }
+        });
+
+        jLabel9.setText("Detection");
+
+        customDetectionSliderLabel.setText("Val");
+
+        jLabel11.setText("Energy");
+
+        customEnergySlider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                customEnergySliderStateChanged(evt);
+            }
+        });
+
+        customEnergySliderLabel.setText("Val");
+
+        customColorPicker.setPreviewPanel(new javax.swing.JPanel());
+
+        jButton2.setText("Close");
+
+        customSaveButton.setText("Save");
+        customSaveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                customSaveButtonActionPerformed(evt);
+            }
+        });
+
+        customLoadButton.setText("Load");
+        customLoadButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                customLoadButtonActionPerformed(evt);
+            }
+        });
+
+        customColorPickerButton.setText("Set Color");
+        customColorPickerButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                customColorPickerButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout propertiesDialogLayout = new javax.swing.GroupLayout(propertiesDialog.getContentPane());
+        propertiesDialog.getContentPane().setLayout(propertiesDialogLayout);
+        propertiesDialogLayout.setHorizontalGroup(
+            propertiesDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(propertiesDialogLayout.createSequentialGroup()
+                .addGroup(propertiesDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(propertiesDialogLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(propertiesDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(propertiesDialogLayout.createSequentialGroup()
+                                .addComponent(jLabel11)
+                                .addGap(24, 24, 24)
+                                .addComponent(customEnergySlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(propertiesDialogLayout.createSequentialGroup()
+                                .addGroup(propertiesDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel9)
+                                    .addComponent(jLabel3))
+                                .addGap(10, 10, 10)
+                                .addGroup(propertiesDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(customScaleSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(customDetectionSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(32, 32, 32)
+                        .addGroup(propertiesDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(customEnergySliderLabel)
+                            .addComponent(customDetectionSliderLabel)
+                            .addComponent(customScaleSliderLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, propertiesDialogLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(customColorPickerButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                .addComponent(customColorPicker, javax.swing.GroupLayout.PREFERRED_SIZE, 604, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, propertiesDialogLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(customSaveButton)
+                .addGap(18, 18, 18)
+                .addComponent(customLoadButton)
+                .addGap(18, 18, 18)
+                .addComponent(jButton2)
+                .addGap(60, 60, 60))
+        );
+        propertiesDialogLayout.setVerticalGroup(
+            propertiesDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(propertiesDialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(propertiesDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(customScaleSliderLabel)
+                    .addComponent(jLabel3)
+                    .addComponent(customScaleSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(propertiesDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(customDetectionSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(customDetectionSliderLabel)
+                    .addComponent(jLabel9))
+                .addGap(18, 18, 18)
+                .addGroup(propertiesDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel11)
+                    .addComponent(customEnergySlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(customEnergySliderLabel))
+                .addGap(93, 93, 93)
+                .addComponent(customColorPickerButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(propertiesDialogLayout.createSequentialGroup()
+                .addComponent(customColorPicker, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                .addGroup(propertiesDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(customSaveButton)
+                    .addComponent(customLoadButton))
+                .addGap(20, 20, 20))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jMenu1.setText("File");
@@ -310,7 +466,7 @@ public class mainFrame extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
+        propertiesButton.setText("Edit");
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem1.setText("New Template");
@@ -319,9 +475,17 @@ public class mainFrame extends javax.swing.JFrame {
                 jMenuItem1ActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem1);
+        propertiesButton.add(jMenuItem1);
 
-        jMenuBar1.add(jMenu2);
+        jMenuItem2.setText("Properties");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        propertiesButton.add(jMenuItem2);
+
+        jMenuBar1.add(propertiesButton);
 
         fpsMenu.setText("General");
         fpsMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -414,12 +578,6 @@ public class mainFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        // TODO add your handling code here:
-        CreateTemplateFrame addFrame = new CreateTemplateFrame();
-        addFrame.setVisible(true);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void fpsMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fpsMenuActionPerformed
         // TODO add your handling code here:
@@ -684,6 +842,129 @@ public class mainFrame extends javax.swing.JFrame {
         clearDataDialog.setVisible(true);
     }//GEN-LAST:event_clearDataButtonActionPerformed
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        CreateTemplateFrame addFrame = new CreateTemplateFrame();
+        addFrame.setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void customScaleSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_customScaleSliderStateChanged
+        // TODO add your handling code here:
+        EnviromentPanel.getHighlightedCreature().scaleFactor = (float)customScaleSlider.getValue()/10;
+        customScaleSliderLabel.setText(String.valueOf((float)customScaleSlider.getValue()/10));
+        
+        
+    }//GEN-LAST:event_customScaleSliderStateChanged
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        propertiesDialog.setVisible(true);
+        
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void customDetectionSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_customDetectionSliderStateChanged
+        // TODO add your handling code here:
+        EnviromentPanel.getHighlightedCreature().detectionRadius = customDetectionSlider.getValue();
+        customDetectionSliderLabel.setText(String.valueOf(customDetectionSlider.getValue()));
+        
+    }//GEN-LAST:event_customDetectionSliderStateChanged
+
+    private void customEnergySliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_customEnergySliderStateChanged
+        // TODO add your handling code here:
+        EnviromentPanel.getHighlightedCreature().totalEnergy = customEnergySlider.getValue();
+        customEnergySliderLabel.setText(String.valueOf(customEnergySlider.getValue()));
+        
+    }//GEN-LAST:event_customEnergySliderStateChanged
+
+    private void customColorPickerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customColorPickerButtonActionPerformed
+        // TODO add your handling code here:
+        EnviromentPanel.getHighlightedCreature().creatureColor = customColorPicker.getColor();
+        
+    }//GEN-LAST:event_customColorPickerButtonActionPerformed
+
+    private void customSaveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customSaveButtonActionPerformed
+        // TODO add your handling code here:
+        savedColor = EnviromentPanel.getHighlightedCreature().creatureColor;
+            int r,g,b;
+                r = customColorPicker.getColor().getRed();
+                g = customColorPicker.getColor().getGreen();
+                b = customColorPicker.getColor().getBlue();
+        try {
+            Formatter formatterX = new Formatter("config.txt");
+            
+            formatterX.format("%s", "Saved_Vales \n");
+            formatterX.format("%s", "Scale_Saved ");
+            formatterX.format("%s\n", customScaleSlider.getValue());
+            formatterX.format("%s", "Detection_Radius_Saved ");
+            formatterX.format("%s\n", customDetectionSlider.getValue());
+            formatterX.format("%s", "Energy_Saved ");
+            formatterX.format("%s\n", customEnergySlider.getValue());
+   
+            formatterX.format("%s", "Color_R ");
+            formatterX.format("%s\n", r);
+            formatterX.format("%s", "Color_G ");
+            formatterX.format("%s\n", g);
+            formatterX.format("%s", "Color_B ");
+            formatterX.format("%s\n", b);
+            
+            
+            
+            
+            
+            formatterX.close();
+        
+        } catch (Exception e) {
+            System.err.println(r);   
+        }
+        
+
+
+
+
+
+
+
+    }//GEN-LAST:event_customSaveButtonActionPerformed
+
+    private void customLoadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customLoadButtonActionPerformed
+        // TODO add your handling code here:
+        BufferedReader br = null;
+        Scanner sc = null;
+        int r,g,b;
+        try {
+            sc = new Scanner(new FileReader("config.txt"));
+          
+       
+            while(!"Saved_Vales".equals(sc.next())){
+                sc.next();
+            }
+            sc.next();
+            customScaleSlider.setValue(sc.nextInt());
+            sc.next();
+            customDetectionSlider.setValue(sc.nextInt());
+            sc.next();
+            customEnergySlider.setValue(sc.nextInt());
+            sc.next();
+            r = sc.nextInt();
+            sc.next();
+            g = sc.nextInt();
+            sc.next();
+            b = sc.nextInt();
+            customColorPicker.setColor(new Color(r,g,b));
+            EnviromentPanel.getHighlightedCreature().creatureColor = customColorPicker.getColor();
+        } catch (Exception e) {
+            
+        }
+
+
+
+
+
+
+
+
+    }//GEN-LAST:event_customLoadButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -735,6 +1016,16 @@ public class mainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem clearDataButton;
     private javax.swing.JDialog clearDataDialog;
     private javax.swing.JButton closeButton;
+    private javax.swing.JColorChooser customColorPicker;
+    private javax.swing.JButton customColorPickerButton;
+    private javax.swing.JSlider customDetectionSlider;
+    private javax.swing.JLabel customDetectionSliderLabel;
+    private javax.swing.JSlider customEnergySlider;
+    private javax.swing.JLabel customEnergySliderLabel;
+    private javax.swing.JButton customLoadButton;
+    private javax.swing.JButton customSaveButton;
+    private javax.swing.JSlider customScaleSlider;
+    private javax.swing.JLabel customScaleSliderLabel;
     private javax.swing.JButton defaultButton;
     private javax.swing.JButton deleteDataNoButton;
     private javax.swing.JButton deleteDataYesButton;
@@ -747,17 +1038,23 @@ public class mainFrame extends javax.swing.JFrame {
     private javax.swing.JDialog frameTickDialog;
     private javax.swing.JMenuItem increaseFPSButton;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JMenuItem openFPSSlider;
+    private javax.swing.JMenu propertiesButton;
+    private javax.swing.JDialog propertiesDialog;
     // End of variables declaration//GEN-END:variables
 }
 
