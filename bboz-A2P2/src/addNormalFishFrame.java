@@ -17,7 +17,7 @@ import javax.swing.JLabel;
  *
  * @author berke
  */
-public class addNormalFishFrame extends javax.swing.JFrame {
+public class AddNormalFishFrame extends javax.swing.JFrame {
 
     
     
@@ -38,11 +38,17 @@ public class addNormalFishFrame extends javax.swing.JFrame {
     /**
      * Creates new form addNormalFishFrame
      */
-    public addNormalFishFrame() {
+    public AddNormalFishFrame() {
         initComponents();
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         jPanel2.setVisible(false);
         confirmationDialog.setSize(320, 180);
+        xPosLabel.setText(String.valueOf(xPos));
+        yPosLabel.setText(String.valueOf(yPos));
+        energyLabel.setText(String.valueOf(startingEnergy));
+        scaleLabel.setText(String.valueOf(scale));
+
+        
     }
 
     /**
@@ -88,6 +94,10 @@ public class addNormalFishFrame extends javax.swing.JFrame {
         stripeNumberButton2 = new javax.swing.JRadioButton();
         stripeNumberButton3 = new javax.swing.JRadioButton();
         stripeNumberLabel = new javax.swing.JLabel();
+        scaleLabel = new javax.swing.JLabel();
+        xPosLabel = new javax.swing.JLabel();
+        yPosLabel = new javax.swing.JLabel();
+        energyLabel = new javax.swing.JLabel();
 
         confirmationDialog.getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -181,7 +191,7 @@ public class addNormalFishFrame extends javax.swing.JFrame {
             }
         });
 
-        nextButton.setText("Next");
+        nextButton.setText("Save");
         nextButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 nextButtonActionPerformed(evt);
@@ -346,6 +356,14 @@ public class addNormalFishFrame extends javax.swing.JFrame {
                 .addContainerGap(23, Short.MAX_VALUE))
         );
 
+        scaleLabel.setText("Scale");
+
+        xPosLabel.setText("X Pos");
+
+        yPosLabel.setText("Y Pos");
+
+        energyLabel.setText("Energy");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -353,24 +371,6 @@ public class addNormalFishFrame extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel4))
-                        .addGap(55, 55, 55)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(xPosSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(yPosSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(47, 47, 47)
-                                .addComponent(jLabel5)
-                                .addGap(18, 18, 18)
-                                .addComponent(startEnergySlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(editScale, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -382,25 +382,69 @@ public class addNormalFishFrame extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(nextButton))
                             .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(19, 19, 19))))
+                        .addGap(19, 19, 19))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel4))
+                        .addGap(55, 55, 55)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(editScale, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(jLabel5))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(scaleLabel)
+                                        .addGap(0, 0, Short.MAX_VALUE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(xPosSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(xPosLabel))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(yPosSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(yPosLabel)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(startEnergySlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(28, 28, 28)
+                        .addComponent(energyLabel)
+                        .addGap(45, 45, 45))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1)
-                    .addComponent(editScale, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(xPosSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel5)
-                    .addComponent(startEnergySlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(9, 9, 9)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(yPosSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(startEnergySlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(energyLabel)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel1)
+                                .addComponent(editScale, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(scaleLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(xPosSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2)
+                            .addComponent(xPosLabel))
+                        .addGap(9, 9, 9)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(yPosLabel)
+                            .addComponent(jLabel3)
+                            .addComponent(yPosSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(16, 16, 16)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -411,14 +455,11 @@ public class addNormalFishFrame extends javax.swing.JFrame {
                 .addGap(8, 8, 8)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(nextButton)
                             .addComponent(jToggleButton2))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addContainerGap())
+                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -458,23 +499,27 @@ public class addNormalFishFrame extends javax.swing.JFrame {
     private void xPosSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_xPosSliderStateChanged
         // TODO add your handling code here:
         xPos = xPosSlider.getValue();
-        
+        xPosLabel.setText(String.valueOf(xPos));
+
     }//GEN-LAST:event_xPosSliderStateChanged
 
     private void yPosSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_yPosSliderStateChanged
         // TODO add your handling code here:
         yPos = yPosSlider.getValue();
+        yPosLabel.setText(String.valueOf(yPos));
     }//GEN-LAST:event_yPosSliderStateChanged
 
     private void startEnergySliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_startEnergySliderStateChanged
         // TODO add your handling code here:
         startingEnergy = startEnergySlider.getValue();
-
+        energyLabel.setText(String.valueOf(startingEnergy));
+        
     }//GEN-LAST:event_startEnergySliderStateChanged
 
     private void editScaleStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_editScaleStateChanged
         // TODO add your handling code here:
         scale = (float)editScale.getValue()/100;
+        scaleLabel.setText(String.valueOf(scale));
         
         
     }//GEN-LAST:event_editScaleStateChanged
@@ -527,7 +572,7 @@ public class addNormalFishFrame extends javax.swing.JFrame {
         Scanner sc = null;
         int r,g,b;
         try {
-            sc = new Scanner(new FileReader("config.txt"));
+            sc = new Scanner(new FileReader("normalFishconfig.txt"));
           
        
             while(!"Normal_Fish".equals(sc.next())){
@@ -567,7 +612,7 @@ public class addNormalFishFrame extends javax.swing.JFrame {
     
     public static void writeToFile(){
         try {
-            formatterX = new Formatter("config.txt");
+            formatterX = new Formatter("normalFishconfig.txt");
             
             formatterX.format("%s", "Normal_Fish \n");
             formatterX.format("%s", "Normal_Fish_Scale ");
@@ -669,6 +714,7 @@ public class addNormalFishFrame extends javax.swing.JFrame {
     private javax.swing.JDialog confirmationDialog;
     private javax.swing.JTextField detectionRadiusField;
     private javax.swing.JSlider editScale;
+    private javax.swing.JLabel energyLabel;
     private javax.swing.JTextField energyUsageField;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JColorChooser jColorChooser1;
@@ -690,13 +736,16 @@ public class addNormalFishFrame extends javax.swing.JFrame {
     private javax.swing.JSlider maxVelocitySlider;
     private javax.swing.JButton nextButton;
     private javax.swing.JButton noButton;
+    private javax.swing.JLabel scaleLabel;
     private javax.swing.JSlider startEnergySlider;
     private javax.swing.JRadioButton stripeNumberButton0;
     private javax.swing.JRadioButton stripeNumberButton1;
     private javax.swing.JRadioButton stripeNumberButton2;
     private javax.swing.JRadioButton stripeNumberButton3;
     private javax.swing.JLabel stripeNumberLabel;
+    private javax.swing.JLabel xPosLabel;
     private javax.swing.JSlider xPosSlider;
+    private javax.swing.JLabel yPosLabel;
     private javax.swing.JSlider yPosSlider;
     private javax.swing.JButton yesButton;
     // End of variables declaration//GEN-END:variables
