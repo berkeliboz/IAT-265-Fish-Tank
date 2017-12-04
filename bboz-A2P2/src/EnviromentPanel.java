@@ -462,6 +462,16 @@ public class EnviromentPanel extends JPanel implements ActionListener,KeyListene
 	}
 	
         
+        public static void generateParameteredPredatorFish(float scaleFactor, Color creatureColor, int posX, int posY, float totalEnergy, boolean isSick, int detectionRadius, int energyUsage, float maxVelocity) {
+		
+		if(predatorList.size() < PREDATOR_FISH_NUMBER) {
+			predatorList.add(new PredatorFish(scaleFactor,  creatureColor,  posX, posY,  totalEnergy,  isSick,  detectionRadius, energyUsage,  maxVelocity));
+			creatures.add(predatorList.get(predatorList.size()-1));
+		
+		}
+		
+	}
+        
         
         
         

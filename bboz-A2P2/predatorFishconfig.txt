@@ -1,0 +1,12 @@
+Predator_Fish 
+Predator_Fish_Scale 1.0
+Predator_Fish_xPos 500
+Predator_Fish_yPos 500
+Predator_Fish_startingEnergy 1000
+Predator_Fish_newCreatureColor_R 204
+Predator_Fish_newCreatureColor_G 204
+Predator_Fish_newCreatureColor_B 255
+Predator_Fish_detectionRadius 550
+Predator_Fish_energyUsage 10
+Predator_Fish_maxVelocity 10.0
+Predator_Fish_isSick false

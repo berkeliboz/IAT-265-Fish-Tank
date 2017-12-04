@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.util.Scanner;
 
@@ -56,6 +57,9 @@ public class mainFrame extends javax.swing.JFrame {
         fpsLabel.setText("Each Frame Rendered in " + String.valueOf(fpsSlider.getValue())+ " ms");
         baitGenerationRateController.setSize(285, 150);
         baitGenerationLabel.setText("Generates Bait once in 50 frames");
+        clearDataDialog.setSize(235, 150);
+    
+    
     }
 
     public void changeRes(int x,int y){this.setSize(x,y);}
@@ -84,8 +88,13 @@ public class mainFrame extends javax.swing.JFrame {
         baitGenerationLabel = new javax.swing.JLabel();
         DefaultButtonBaitGenerator = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        clearDataDialog = new javax.swing.JDialog();
+        jLabel2 = new javax.swing.JLabel();
+        deleteDataNoButton = new javax.swing.JButton();
+        deleteDataYesButton = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        clearDataButton = new javax.swing.JMenuItem();
         exitButton = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -96,7 +105,7 @@ public class mainFrame extends javax.swing.JFrame {
         baitGeneratorButton = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         addFishButton = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
+        addPredatorFishButton = new javax.swing.JMenuItem();
         addBaitButton = new javax.swing.JMenuItem();
 
         frameTickDialog.getContentPane().setLayout(new java.awt.FlowLayout());
@@ -234,9 +243,61 @@ public class mainFrame extends javax.swing.JFrame {
                 .addContainerGap(204, Short.MAX_VALUE))
         );
 
+        jLabel2.setText("Delete All Template Data?");
+
+        deleteDataNoButton.setText("No");
+        deleteDataNoButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteDataNoButtonActionPerformed(evt);
+            }
+        });
+
+        deleteDataYesButton.setText("Yes");
+        deleteDataYesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteDataYesButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout clearDataDialogLayout = new javax.swing.GroupLayout(clearDataDialog.getContentPane());
+        clearDataDialog.getContentPane().setLayout(clearDataDialogLayout);
+        clearDataDialogLayout.setHorizontalGroup(
+            clearDataDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(clearDataDialogLayout.createSequentialGroup()
+                .addGroup(clearDataDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(clearDataDialogLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(deleteDataNoButton)
+                        .addGap(60, 60, 60)
+                        .addComponent(deleteDataYesButton))
+                    .addGroup(clearDataDialogLayout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addComponent(jLabel2)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        clearDataDialogLayout.setVerticalGroup(
+            clearDataDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(clearDataDialogLayout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
+                .addGroup(clearDataDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(deleteDataNoButton)
+                    .addComponent(deleteDataYesButton))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jMenu1.setText("File");
+
+        clearDataButton.setText("Clear Data");
+        clearDataButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearDataButtonActionPerformed(evt);
+            }
+        });
+        jMenu1.add(clearDataButton);
 
         exitButton.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0));
         exitButton.setText("Exit");
@@ -318,9 +379,14 @@ public class mainFrame extends javax.swing.JFrame {
         });
         jMenu3.add(addFishButton);
 
-        jMenuItem5.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.ALT_MASK));
-        jMenuItem5.setText("Predator Template");
-        jMenu3.add(jMenuItem5);
+        addPredatorFishButton.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.ALT_MASK));
+        addPredatorFishButton.setText("Predator Template");
+        addPredatorFishButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addPredatorFishButtonActionPerformed(evt);
+            }
+        });
+        jMenu3.add(addPredatorFishButton);
 
         addBaitButton.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.ALT_MASK));
         addBaitButton.setText("Bait Template");
@@ -525,6 +591,96 @@ public class mainFrame extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_exitButtonActionPerformed
 
+    private void addPredatorFishButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPredatorFishButtonActionPerformed
+        // TODO add your handling code here:
+
+        BufferedReader br = null;
+        Scanner sc = null;
+        int r,g,b;
+        try {
+            sc = new Scanner(new FileReader("predatorFishconfig.txt"));
+          
+            float scale,maxVelocity;
+            int xPos,yPos,startingEnergy,detectionRadius,energyUsage;
+            Color newCreatureColor;
+            boolean isSick;
+            
+            
+            while(!"Predator_Fish".equals(sc.next())){
+                sc.next();
+            }
+            sc.next();
+            scale = sc.nextFloat();
+            sc.next();
+            
+            xPos = sc.nextInt();
+            sc.next();
+            yPos = sc.nextInt();
+            sc.next();
+            startingEnergy = sc.nextInt();
+            sc.next();
+            r= sc.nextInt();
+            sc.next();
+            g = sc.nextInt();
+            sc.next();
+            b = sc.nextInt();
+            newCreatureColor = new Color(r,g,b);
+            sc.next();
+            
+            
+            detectionRadius = sc.nextInt();
+            sc.next();
+            energyUsage = sc.nextInt();
+            sc.next();
+            
+            maxVelocity = sc.nextFloat();
+            sc.next();
+            isSick = sc.nextBoolean();
+           
+        
+            EnviromentPanel.generateParameteredPredatorFish(scale, newCreatureColor, xPos, yPos, startingEnergy, isSick, detectionRadius, energyUsage, maxVelocity);
+          
+            
+        } catch (Exception e) {
+            
+            System.err.println("Err");
+            
+        }
+        
+        
+
+    }//GEN-LAST:event_addPredatorFishButtonActionPerformed
+
+    private void deleteDataNoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteDataNoButtonActionPerformed
+        // TODO add your handling code here:
+        clearDataDialog.setVisible(false);
+    }//GEN-LAST:event_deleteDataNoButtonActionPerformed
+
+    private void deleteDataYesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteDataYesButtonActionPerformed
+        // TODO add your handling code here:
+        
+        try {
+        File file = new File("predatorFishconfig.txt");
+        file.delete();
+        file = new File("normalFishconfig.txt");
+        file.delete();
+        file = new File("baitConfig.txt");
+        file.delete();
+            
+        } catch (Exception e) {
+       
+            System.err.println("files_not_found");
+        }
+        
+        clearDataDialog.setVisible(false);
+        
+    }//GEN-LAST:event_deleteDataYesButtonActionPerformed
+
+    private void clearDataButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearDataButtonActionPerformed
+        // TODO add your handling code here:
+        clearDataDialog.setVisible(true);
+    }//GEN-LAST:event_clearDataButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -568,12 +724,17 @@ public class mainFrame extends javax.swing.JFrame {
     private javax.swing.JButton DefaultButtonBaitGenerator;
     private javax.swing.JMenuItem addBaitButton;
     private javax.swing.JMenuItem addFishButton;
+    private javax.swing.JMenuItem addPredatorFishButton;
     private javax.swing.JLabel baitGenerationLabel;
     private javax.swing.JDialog baitGenerationRateController;
     private javax.swing.JSlider baitGenerationSlider;
     private javax.swing.JMenuItem baitGeneratorButton;
+    private javax.swing.JMenuItem clearDataButton;
+    private javax.swing.JDialog clearDataDialog;
     private javax.swing.JButton closeButton;
     private javax.swing.JButton defaultButton;
+    private javax.swing.JButton deleteDataNoButton;
+    private javax.swing.JButton deleteDataYesButton;
     private javax.swing.JMenuItem exitButton;
     private javax.swing.JLabel fpsLabel;
     private javax.swing.JMenu fpsMenu;
@@ -585,14 +746,16 @@ public class mainFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JMenuItem openFPSSlider;
     // End of variables declaration//GEN-END:variables
 }
+
+

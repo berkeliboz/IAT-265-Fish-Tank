@@ -74,9 +74,28 @@ public class PredatorFish extends Creature{
 		
 	}
 
-    PredatorFish(float scaleFactor, Color creatureColor, float scaleFactor0, int posX, int posY, float totalEnergy, boolean sick, int detectionRadius, int energyUsage, float maxVelocity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+        public PredatorFish(float scaleFactor, Color creatureColor, int posX, int posY, float totalEnergy, boolean isSick, int detectionRadius, int energyUsage, float maxVelocity) {
+            super();
+            this.maxVelocity = maxVelocity;
+            this.energyUsageOverTime = energyUsage;
+            fishHeight = 70;
+            fishWidth = 175;	
+            this.detectionRadius = detectionRadius;
+            anchorPoint.x = posX;
+            anchorPoint.y = posY;
+            this.creatureColor = creatureColor;
+            this.scaleFactor = scaleFactor;
+            initialScale = scaleFactor;	
+            
+            this.isSick = isSick;																			//Fish's are born healthy
+            setShapeAttributes();																		//Draw the fish
+
+            detectionRadiusCircle = new Arc2D.Double(-detectionRadius/2, -detectionRadius/2, detectionRadius, detectionRadius, 0, 360,Arc2D.PIE);
+            FOV = new Area(detectionRadiusCircle);
+            creatureColor = new Color(181,29,126);
+            eyeColor = creatureColor;
+            
+        }
 	
 	//Getters/Setters
 	public ArrayList<Fish> getTargetList(){return detectedFishList;}

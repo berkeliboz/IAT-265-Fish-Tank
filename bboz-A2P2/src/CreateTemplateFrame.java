@@ -174,11 +174,13 @@ public class CreateTemplateFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         String objType = mainFrame.getChoosenString();
         if(objType == "Fish"){
-            AddNormalFishFrame fishFrame = new AddNormalFishFrame();
+            AddFishFrame fishFrame = new AddFishFrame();
             fishFrame.setVisible(true);
             this.setVisible(false);
         }
         else if(objType == "PredatorFish"){
+            AddFishFrame fishFrame = new AddFishFrame();
+            fishFrame.setVisible(true);
             this.setVisible(false);
         }
         else if(objType == "Bait"){
