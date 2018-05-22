@@ -1,13 +1,13 @@
 Normal_Fish 
-Normal_Fish_Scale 1.0
-Normal_Fish_xPos 500
-Normal_Fish_yPos 500
-Normal_Fish_startingEnergy 1000
-Normal_Fish_newCreatureColor_R 102
+Normal_Fish_Scale 1.47
+Normal_Fish_xPos 1800
+Normal_Fish_yPos 700
+Normal_Fish_startingEnergy 2000
+Normal_Fish_newCreatureColor_R 255
 Normal_Fish_newCreatureColor_G 255
 Normal_Fish_newCreatureColor_B 102
 Normal_Fish_detectionRadius 550
 Normal_Fish_energyUsage 10
 Normal_Fish_maxVelocity 10.0
 Normal_Fish_isSick false
-Normal_Fish_stripeNumber 0
+Normal_Fish_stripeNumber 2

@@ -1,9 +1,9 @@
 Bait 
-Bait_size 576
-Bait_floatingRange 91.0
-Bait_color1_R 51
-Bait_color1_G 153
+Bait_size 463
+Bait_floatingRange 100.0
+Bait_color1_R 255
+Bait_color1_G 102
 Bait_color1_b 255
-Bait_color2_R 153
-Bait_color2_G 255
-Bait_color2_b 204
+Bait_color2_R 102
+Bait_color2_G 102
+Bait_color2_b 255

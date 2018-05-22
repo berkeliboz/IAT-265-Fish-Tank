@@ -189,13 +189,13 @@ public class ControlPanel extends JPanel{
 		
 		userInfo.add(new JLabel("                 Key Bounds"));		
 		userInfo.add(new JLabel("                 "));	
-		userInfo.add(new JLabel(" � Click on a Fish to Get Info"));
-		userInfo.add(new JLabel(" � Enter to Toggle the Control Panel"));
-		userInfo.add(new JLabel(" � Shift + D to Toggle Fish Info"));
-		userInfo.add(new JLabel(" � Shift + Space to Toggle Predator FOV "));
-		userInfo.add(new JLabel(" � Click anywhere to generate a bait "));
-		userInfo.add(new JLabel(" � Click and hold bait to increase size "));
-		userInfo.add(new JLabel(" � CTRL + Click on bait to delete"));
+		userInfo.add(new JLabel(" - Click on a Fish to Get Info"));
+		userInfo.add(new JLabel(" - Enter to Toggle the Control Panel"));
+		userInfo.add(new JLabel(" - Shift + D to Toggle Fish Info"));
+		userInfo.add(new JLabel(" - Shift + Space to Toggle Predator FOV "));
+		userInfo.add(new JLabel(" - Click anywhere to generate a bait "));
+		userInfo.add(new JLabel(" - Click and hold bait to increase size "));
+		userInfo.add(new JLabel(" - CTRL + Click on bait to delete"));
 		userInfo.add(new JLabel("                 "));	
 		
 		
@@ -438,7 +438,7 @@ public class ControlPanel extends JPanel{
 		additionalInfoPanel.setBorder(new TitledBorder("Additional Info"));
 		additionalInfoPanel.add(new JLabel("                Known Bugs "));
 		additionalInfoPanel.add(new JLabel("                		 "));
-		additionalInfoPanel.add(new JLabel(" � After using Panel, Enviromental "));
+		additionalInfoPanel.add(new JLabel(" - After using Panel, Enviromental "));
 		additionalInfoPanel.add(new JLabel(" Panel loses focus. To fix, press TAB "));
 		additionalInfoPanel.add(new JLabel(" and try clicking again "));
 		additionalInfoPanel.add(new JLabel("                		 "));

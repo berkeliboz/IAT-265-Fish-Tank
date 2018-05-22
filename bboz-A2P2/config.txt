@@ -1,7 +1,0 @@
-Saved_Vales 
-Scale_Saved 10
-Detection_Radius_Saved 790
-Energy_Saved 2849
-Color_R 102
-Color_G 102
-Color_B 255

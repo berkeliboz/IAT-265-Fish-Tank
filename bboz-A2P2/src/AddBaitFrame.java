@@ -6,18 +6,10 @@ import java.util.Formatter;
 import java.util.Scanner;
 import javax.swing.JFrame;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/**
- *
- * @author berke
- */
 public class AddBaitFrame extends javax.swing.JFrame {
 
+    //Local variable declerations for saving data
     boolean colorChooserBoolean = true;
     static int size = 250;
     static float floatingRange = 25f;
@@ -30,8 +22,8 @@ public class AddBaitFrame extends javax.swing.JFrame {
     public AddBaitFrame() {
         
         initComponents();
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	
-        confirmationDialog.setSize(320, 180);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	//Disposes on close
+        confirmationDialog.setSize(320, 180);                   //Sets confirmation dialog size
     }
 
     /**
@@ -165,7 +157,7 @@ public class AddBaitFrame extends javax.swing.JFrame {
 
         baitColorChooser2.setPreviewPanel(new javax.swing.JPanel());
 
-        jLabel1.setText("Color 2");
+        jLabel1.setText("Color_2");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -236,29 +228,29 @@ public class AddBaitFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void sizeSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sizeSliderStateChanged
-        // TODO add your handling code here:
-        sizeIndicator.setText(String.valueOf(sizeSlider.getValue()));
-        size = sizeSlider.getValue();
+        sizeIndicator.setText(String.valueOf(sizeSlider.getValue()));           //Sets label
+        size = sizeSlider.getValue();                                       
+
     }//GEN-LAST:event_sizeSliderStateChanged
 
     private void floatingRangeSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_floatingRangeSliderStateChanged
         // TODO add your handling code here:
-        floatingRange = floatingRangeSlider.getValue();
-        rangeIndicator.setText(String.valueOf(floatingRange));
+        floatingRange = floatingRangeSlider.getValue();                         //Sets value
+        rangeIndicator.setText(String.valueOf(floatingRange));                  //Sets label
 
     }//GEN-LAST:event_floatingRangeSliderStateChanged
 
     private void baitColorChooserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_baitColorChooserMouseClicked
         // TODO add your handling code here:
-        
+        //DELETE THIS
     }//GEN-LAST:event_baitColorChooserMouseClicked
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         // TODO add your handling code here:
-        color1 = baitColorChooser.getColor();
+        color1 = baitColorChooser.getColor();   //get color
         color2 = baitColorChooser2.getColor();
-        writeToFile();
-        confirmationDialog.setVisible(true);
+        writeToFile();                          //call read/save
+        confirmationDialog.setVisible(true);    
     }//GEN-LAST:event_saveButtonActionPerformed
 
     private void noButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noButtonActionPerformed
@@ -270,18 +262,17 @@ public class AddBaitFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         confirmationDialog.setVisible(false);
         this.setVisible(false);
-        EnviromentPanel.generateParameteredBait(size, color1, color2, floatingRange);
+        EnviromentPanel.generateParameteredBait(size, color1, color2, floatingRange);   //Generate Bait
     }//GEN-LAST:event_yesButtonActionPerformed
 
      private static void readFromFile(){
-        BufferedReader br = null;
-        Scanner sc = null;
-        int r1,g1,b1,r2,g2,b2;
+        Scanner sc = null;              //Scanner created
+        int r1,g1,b1,r2,g2,b2;          //To hold rbg values
         try {
             sc = new Scanner(new FileReader("baitConfig.txt"));
           
-       
-            while(!"Bait".equals(sc.next())){
+            
+            while(!"Bait".equals(sc.next())){   //To identify Bait values
                 sc.next();
             }
             sc.next();
@@ -308,11 +299,11 @@ public class AddBaitFrame extends javax.swing.JFrame {
         }
         
     }
-    
+    //This function writes values to file
     public static void writeToFile(){
         try {
             Formatter formatterX = new Formatter("baitConfig.txt");
-            int r1,r2,g1,g2,b1,b2;
+            int r1,r2,g1,g2,b1,b2;      //for rgb
             r1 = color1.getRed();
             g1 = color1.getGreen();
             b1 = color1.getBlue();
@@ -342,7 +333,7 @@ public class AddBaitFrame extends javax.swing.JFrame {
             formatterX.close();
             
         
-            readFromFile();
+            readFromFile();         //Reads the values
         
         } catch (Exception e) {
             
@@ -354,40 +345,6 @@ public class AddBaitFrame extends javax.swing.JFrame {
         
     }
     
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddBaitFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddBaitFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddBaitFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddBaitFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new AddBaitFrame().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JColorChooser baitColorChooser;
